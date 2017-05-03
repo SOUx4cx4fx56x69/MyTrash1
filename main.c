@@ -2,7 +2,9 @@
 #include "socket.h"
 #include "base64.h"
 #include "stratum.h"
+
 //For !(not)(less :) ) warning(lol bottom)
+#include <string.h>
 #include <string.h>
 #include <unistd.h>
 #warning This experemental/develop program!! //lol^^
@@ -29,11 +31,15 @@ End parse
 /*
 for method
 */
-char * method(char*method,int*socket)
+char * method(char*method)
 {
+int Coin = InitClient( HOST, PORT );
 char * tmp = (char*)calloc(sizeof(char),MINSIZE);
 sprintf(tmp,"%s:%s",USR,PSWRD);
 char * token = b64_encode(tmp);
+
+int ContentLength = strlen(method);
+
 //token = 
 sprintf(tmp,
 "POST / HTTP/1.1\r\n"
@@ -41,12 +47,14 @@ sprintf(tmp,
 "Authorization: Basic %s\r\n"
 "Accept: */*\r\n"
 "content-type: text/plain;\r\n"
-"Content-Length: 67\r\n"
+"Content-Length: %d\r\n"
 "\r\n"
-"%s\r\n"
-,HOST,PORT,token,method);
-writeTo(*socket,tmp);
-readFrom(*socket,tmp);
+"%s\r\n\r\n"
+,HOST,PORT,token,ContentLength,method);
+writeTo(Coin,tmp);
+readFrom(Coin,tmp);
+if(strstr(tmp,"401") != NULL) error("Not good pass or login for coin");
+close(Coin);
 return tmp;
 }
 /*
@@ -56,16 +64,30 @@ end for method
 
 int main(int argCount,char**arguments)
 { 
+
+
  parse(argCount,arguments);
- int Coin = InitClient( HOST, PORT );
+
+ char * buffer = (char*)malloc( sizeof(char) * MINSIZE);
+ if(!buffer) error("Not can allocate memory");
+ char * meth = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }");
+
+ char * meth1 = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getwork\", \"params\": [] }");
+ float work; 
+ getDifficulty(meth,&work); 
+ printf("%f",work);
+ char ** _work = getWork(meth1);
+/*
  int Stratum;
  initStratumServ(HOST,3333,Stratum);
  // 
  int client = AcceptClient(Stratum);
- char * buffer = (char*)malloc( sizeof(char) * MINSIZE);
- if(!buffer) error("Not can allocate memory");
+
 //TEST
-  readFrom(client,buffer);
+  readFrom(client,buffer); 
+  char ** Answers = GetIdAndMethod(buffer);
+ if( !Answers )printf("error");
+
   printf("%s\n",buffer);
   writeTo(client,"{\"id\": 1, \"result\": [[\"mining.notify\", \"ae6812eb4cd7735a302a8a9dd95cf71f\"], \"08000002\", 4], \"error\": null}");
   readFrom(client,buffer);
@@ -79,12 +101,14 @@ sleep(5);
   readFrom(client,buffer);
   printf("%s\n",buffer);
  }
- sleep(5000);
+*/
+
+
  //
- printf("%s\n",buffer);
- sleep(5000);
+
+ free(meth);
+ free(meth1);
  free(buffer);
- close(Coin);
- close(client);
+ //close(client);
  return 1;
 }
