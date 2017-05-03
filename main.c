@@ -1,12 +1,34 @@
 #include "main.h"
 #include "socket.h"
 #include "base64.h"
-#define MINSIZE 2056
 
-char * method(char*method,char * host,int port,char * usr,char*pswrd)
+
+static char * HOST;
+static int PORT;
+static char * USR;
+static char * PSWRD;
+/*
+Parse
+*/
+void parse(int argCount,char**arguments)
+{
+ if(argCount < 5) return error("./programm rpcAddr rpcPort rpcUser rpcPass");
+ HOST = strdup(arguments[1]);
+ PORT = atoi(arguments[2]);
+ USR = strdup(arguments[3]);
+ PSWRD = strdup(arguments[4]);
+}
+/*
+End parse
+*/
+
+/*
+for method
+*/
+char * method(char*method)
 {
 char * tmp = (char*)calloc(sizeof(char),MINSIZE);
-sprintf(tmp,"%s:%s",usr,pswrd);
+sprintf(tmp,"%s:%s",USR,PSWRD);
 char * token = b64_encode(tmp);
 //token = 
 sprintf(tmp,
@@ -18,20 +40,22 @@ sprintf(tmp,
 "Content-Length: 67\r\n"
 "\r\n"
 "%s\r\n"
-,host,port,token,method);
+,HOST,PORT,token,method);
 return tmp;
 }
+/*
+end for method
+*/
+
 
 int main(int argCount,char**arguments)
-
-{ // ./programm CoinAddr PortCoin coinUse CoinPass
- if(argCount < 5) return 0;
- int Coin = InitClient( arguments[1], atoi(arguments[2]) );
-
+{ 
+ parse(argCount,arguments);
+ int Coin = InitClient( HOST, PORT );
  char * buffer;
  buffer = (char*)malloc( sizeof(char) * MINSIZE);
 
- char * meth = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }",arguments[1],atoi(arguments[2]),arguments[3],arguments[4]);
+ char * meth = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }");
 
  writeTo(Coin,meth);
 
