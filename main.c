@@ -77,6 +77,7 @@ int main(int argCount,char**arguments)
  getDifficulty(meth,&work); 
  printf("%f",work);
  char ** _work = getWork(meth1);
+ printf("data:%s\nhash1:%s\ntarget:%s\n",_work[0],_work[1],_work[2]);
 /*
  int Stratum;
  initStratumServ(HOST,3333,Stratum);
@@ -108,6 +109,7 @@ sleep(5);
 
  free(meth);
  free(meth1);
+ free(_work);
  free(buffer);
  //close(client);
  return 1;

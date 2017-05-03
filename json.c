@@ -6,6 +6,12 @@
 #define Check(buffer) if(*buffer != '"' || *(buffer+1) != ':' || *(buffer+2) != '"' && *buffer) return 0;\
  buffer+=3;
 #define Check1(buffer) if(*buffer != '"' || *(buffer+1) != ',' || *(buffer+2) != '"' && *buffer) return 0;
+#define crete_arguments()\
+char ** arguments;\
+arguments=(char**)malloc(sizeof(char*)*3);\
+*arguments=(char*)malloc(sizeof(char)*strlen(data)); \
+*arguments=(char*)malloc(sizeof(char)*strlen(hash1)); \
+*arguments=(char*)malloc(sizeof(char)*strlen(target));
 char * getOnlyJson(char*buffer)
 {
 
@@ -87,6 +93,10 @@ buffer+=7;
 Check(buffer);
 char * target = (char*)malloc(sizeof(char) * strlen(buffer));
 buffer+=getP(buffer,target);
-printf("\ndata:%s\nhash1:%s\ntarget:%s\n",data,hash1,target);
 free(first);
+crete_arguments();
+arguments[0]=strdup(data);
+arguments[1]=strdup(hash1);
+arguments[2]=strdup(target);
+return arguments;
 }
