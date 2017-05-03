@@ -1,89 +1,18 @@
 #include "main.h"
 #include "socket.h"
-#include "base64.h"
 #include "stratum.h"
-
-//For !(not)(less :) ) warning(lol bottom)
-#include <string.h>
-#include <string.h>
-#include <unistd.h>
-#warning This experemental/develop program!! //lol^^
-
-static char * HOST;
-static int PORT;
-static char * USR;
-static char * PSWRD;
-/*
-Parse
-*/
-void parse(int argCount,char**arguments)
-{
- if(argCount < 5) return error("./programm rpcAddr rpcPort rpcUser rpcPass");
- HOST = strdup(arguments[1]);
- PORT = atoi(arguments[2]);
- USR = strdup(arguments[3]);
- PSWRD = strdup(arguments[4]);
-}
-/*
-End parse
-*/
-
-/*
-for method
-*/
-char * method(char*method)
-{
-int Coin = InitClient( HOST, PORT );
-char * tmp = (char*)calloc(sizeof(char),MINSIZE);
-sprintf(tmp,"%s:%s",USR,PSWRD);
-char * token = b64_encode(tmp);
-
-int ContentLength = strlen(method);
-
-//token = 
-sprintf(tmp,
-"POST / HTTP/1.1\r\n"
-"Host: %s:%d\r\n"
-"Authorization: Basic %s\r\n"
-"Accept: */*\r\n"
-"content-type: text/plain;\r\n"
-"Content-Length: %d\r\n"
-"\r\n"
-"%s\r\n\r\n"
-,HOST,PORT,token,ContentLength,method);
-writeTo(Coin,tmp);
-readFrom(Coin,tmp);
-if(strstr(tmp,"401") != NULL) error("Not good pass or login for coin");
-close(Coin);
-return tmp;
-}
-/*
-end for method
-*/
-
+#warning This experemental/develop program!! 
 
 int main(int argCount,char**arguments)
 { 
-
-
  parse(argCount,arguments);
-
- char * buffer = (char*)malloc( sizeof(char) * MINSIZE);
- if(!buffer) error("Not can allocate memory");
- char * meth = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }");
-
- char * meth1 = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getwork\", \"params\": [] }");
- float work; 
- getDifficulty(meth,&work); 
- printf("%f",work);
- char ** _work = getWork(meth1);
- printf("data:%s\nhash1:%s\ntarget:%s\n",_work[0],_work[1],_work[2]);
-/*
+ pthread_t stratum;
  int Stratum;
- initStratumServ(HOST,3333,Stratum);
- // 
- int client = AcceptClient(Stratum);
-
+ initStratumServ(arguments[1],3333,Stratum);
+ pthread_create(&stratum,0,AcceptClient,Stratum);
+ printf("Start thread\n");
+ pthread_join(stratum);
+/*
 //TEST
   readFrom(client,buffer); 
   char ** Answers = GetIdAndMethod(buffer);
@@ -103,14 +32,5 @@ sleep(5);
   printf("%s\n",buffer);
  }
 */
-
-
- //
-
- free(meth);
- free(meth1);
- free(_work);
- free(buffer);
- //close(client);
  return 1;
 }

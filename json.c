@@ -1,8 +1,9 @@
 #include <string.h>
 #include <stdlib.h>
 #include "main.h"
-#define SIZEBUFFER MINSIZE*1
+
 //shitcode228
+#define SIZEBUFFER MINSIZE*1
 #define Check(buffer) if(*buffer != '"' || *(buffer+1) != ':' || *(buffer+2) != '"' && *buffer) return 0;\
  buffer+=3;
 #define Check1(buffer) if(*buffer != '"' || *(buffer+1) != ',' || *(buffer+2) != '"' && *buffer) return 0;
@@ -55,7 +56,7 @@ if(!*buffer) return 0;
 return count;
 }
 
-char ** getWork(char*buf)
+void getWork(char*buf,int socket)
 {
 char * buffer = getOnlyJson(buf);
 if(*buffer == 0) return 0;
@@ -95,8 +96,9 @@ char * target = (char*)malloc(sizeof(char) * strlen(buffer));
 buffer+=getP(buffer,target);
 free(first);
 crete_arguments();
+printf("data:%s\nhash1:%s\ntarget:%s\n",data,hash1,target);
 arguments[0]=strdup(data);
 arguments[1]=strdup(hash1);
 arguments[2]=strdup(target);
-return arguments;
+free(arguments);
 }

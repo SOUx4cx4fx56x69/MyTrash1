@@ -108,7 +108,7 @@ printf("Opened new connection with %d.%d.%d.%d\n",
   (int)((cli_addr.sin_addr.s_addr&0xFF00)>>8),
   (int)((cli_addr.sin_addr.s_addr&0xFF0000)>>16),
   (int)((cli_addr.sin_addr.s_addr&0xFF000000)>>24));
-  return newsockfd;
+  pthread_create(&client,NULL,ToStratumClient,newsockfd);
 }//ELSE
 }//while
 
