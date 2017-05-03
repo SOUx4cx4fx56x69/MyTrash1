@@ -1,8 +1,10 @@
 #include "main.h"
 #include "socket.h"
 #include "base64.h"
-
-
+//For !(not) warning
+#include <string.h>
+#include <unistd.h>
+#warning This experemental/develop program!!
 static char * HOST;
 static int PORT;
 static char * USR;
@@ -54,9 +56,11 @@ int main(int argCount,char**arguments)
 { 
  parse(argCount,arguments);
  int Coin = InitClient( HOST, PORT );
- 
+ // 
  char * buffer = (char*)malloc( sizeof(char) * MINSIZE);
  if(!buffer) error("Not can allocate memory");
+ //
+
  buffer = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }",&Coin);
 
  printf("%s\n",buffer);
