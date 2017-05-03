@@ -85,7 +85,7 @@ InitClient(char*host,int portno)
 
 
 
-void
+int
 AcceptClient(int socket)
 {
 //
@@ -108,9 +108,7 @@ printf("Opened new connection with %d.%d.%d.%d\n",
   (int)((cli_addr.sin_addr.s_addr&0xFF00)>>8),
   (int)((cli_addr.sin_addr.s_addr&0xFF0000)>>16),
   (int)((cli_addr.sin_addr.s_addr&0xFF000000)>>24));
-pthread_create(&client,NULL, ToStratumClient, newsockfd );
-pthread_join(client,NULL);
-close(newsockfd);
+  return newsockfd;
 }//ELSE
 }//while
 
