@@ -3,19 +3,22 @@
 #include "base64.h"
 #define MINSIZE 2056
 
-char * http_auth_string(char * path,char * host,char * usr,char*pswrd)
+char * method(char*method,char * host,int port,char * usr,char*pswrd)
 {
 char * tmp = (char*)calloc(sizeof(char),MINSIZE);
 sprintf(tmp,"%s:%s",usr,pswrd);
 char * token = b64_encode(tmp);
 //token = 
 sprintf(tmp,
-"GET %s HTTP/1.1\n"
-"Content-Type: text/plain\n"
-"Host: %s\n"
-"Authorization: Basic %s\n"
-"\r\n\r\n"
-,path,host,token);
+"POST / HTTP/1.1\r\n"
+"Host: %s:%d\r\n"
+"Authorization: Basic %s\r\n"
+"Accept: */*\r\n"
+"content-type: text/plain;\r\n"
+"Content-Length: 67\r\n"
+"\r\n"
+"%s\r\n"
+,host,port,token,method);
 return tmp;
 }
 
@@ -28,13 +31,15 @@ int main(int argCount,char**arguments)
  char * buffer;
  buffer = (char*)malloc( sizeof(char) * MINSIZE);
 
- char * auth = http_auth_string("/",arguments[1],arguments[3],arguments[4]);
- writeTo(Coin,auth);
- //writeTo(Coin,"{\"jsonrpc\": \"1.0\", \"id\":\"curltest\", \"method\": \"getinfo\", \"params\": [] }");
+ char * meth = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }",arguments[1],atoi(arguments[2]),arguments[3],arguments[4]);
+
+ writeTo(Coin,meth);
+
  readFrom(Coin,buffer);
  printf("%s\n",buffer);
 
+ free(meth);
  free(buffer);
-
+ close(Coin);
  return 1;
 }
