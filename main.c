@@ -1,10 +1,12 @@
 #include "main.h"
 #include "socket.h"
 #include "base64.h"
-//For !(not) warning
+#include "stratum.h"
+//For !(not)(less :) ) warning(lol bottom)
 #include <string.h>
 #include <unistd.h>
-#warning This experemental/develop program!!
+#warning This experemental/develop program!! //lol^^
+
 static char * HOST;
 static int PORT;
 static char * USR;
