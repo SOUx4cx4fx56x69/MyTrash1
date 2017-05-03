@@ -25,7 +25,7 @@ End parse
 /*
 for method
 */
-char * method(char*method)
+char * method(char*method,int*socket)
 {
 char * tmp = (char*)calloc(sizeof(char),MINSIZE);
 sprintf(tmp,"%s:%s",USR,PSWRD);
@@ -41,6 +41,8 @@ sprintf(tmp,
 "\r\n"
 "%s\r\n"
 ,HOST,PORT,token,method);
+writeTo(*socket,tmp);
+readFrom(*socket,tmp);
 return tmp;
 }
 /*
@@ -55,12 +57,8 @@ int main(int argCount,char**arguments)
  char * buffer;
  buffer = (char*)malloc( sizeof(char) * MINSIZE);
 
- char * meth = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }");
-
- writeTo(Coin,meth);
-
- readFrom(Coin,buffer);
- printf("%s\n",buffer);
+ char * meth = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }",&Coin);
+ printf("%s\n",meth);
 
  free(meth);
  free(buffer);
