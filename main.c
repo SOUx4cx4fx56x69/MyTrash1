@@ -54,13 +54,13 @@ int main(int argCount,char**arguments)
 { 
  parse(argCount,arguments);
  int Coin = InitClient( HOST, PORT );
- char * buffer;
- buffer = (char*)malloc( sizeof(char) * MINSIZE);
+ 
+ char * buffer = (char*)malloc( sizeof(char) * MINSIZE);
+ if(!buffer) error("Not can allocate memory");
+ buffer = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }",&Coin);
 
- char * meth = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }",&Coin);
- printf("%s\n",meth);
+ printf("%s\n",buffer);
 
- free(meth);
  free(buffer);
  close(Coin);
  return 1;
