@@ -1,0 +1,1 @@
+void ToStratumClient(int socket);
