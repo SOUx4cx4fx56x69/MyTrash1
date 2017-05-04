@@ -78,7 +78,6 @@ if(*buffer != '{') return 0;
 
 Jumping(jumpTo,buffer,"\"data");
 
-
 buffer+=7;
 if(*buffer != '"') return 0;
 *buffer++;
@@ -87,7 +86,7 @@ char * data = (char*)malloc(sizeof(char) * strlen(buffer));
 buffer+=getP(buffer,data);
 Check1(buffer);
 buffer+=2;
-if(*(buffer) != '"' ||  *(buffer+1) != 'h' ||  *(buffer+2) != 'a' ||  *(buffer+3) != 's' ||  *(buffer+4) != 'h' ||  *(buffer+5) != '1' || *(buffer+6) != '"' && *buffer) return 0;
+Jumping(jumpTo,buffer,"\"hash1");
 buffer+=6;
 
 Check(buffer);
