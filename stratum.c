@@ -64,6 +64,9 @@ void SetBlock(int * socket)
  char * json = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getwork\", \"params\": [] }");
  getWork(json,*socket);
  printf("data:%s\nhash1:%s\ntarget:%s\n",latest.data,latest.hash1,latest.target);
+ free(latest.data);
+ free(latest.hash1);
+ free(latest.target);
 }
 
 void ToStratumClient(int socket)
