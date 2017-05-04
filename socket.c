@@ -117,8 +117,19 @@ printf("Opened new connection with %d.%d.%d.%d\n",
 void inline
 writeTo(int socket,char*msg)
 {
-if(send(socket,msg,strlen(msg),MSG_NOSIGNAL) == -1)error("No can write to socket. ");
-if(send(socket,"\n",1,MSG_NOSIGNAL) == -1)error("No can write to socket. ");
+
+if(send(socket,msg,strlen(msg),MSG_NOSIGNAL) == -1)
+{
+fprintf(stderr,"No can write to socket. ");
+return -1;
+}
+
+if(send(socket,"\n",1,MSG_NOSIGNAL) == -1)
+{
+fprintf(stderr,"No can write to socket. ");
+return -1;
+}
+
 }
 
 void inline 
@@ -126,9 +137,17 @@ readFrom(int socket,char*buffer)
 {
 memset(buffer,0,SIZEBUFFER);
 #ifdef WIN32
-if((recv(socket, buffer, SIZEBUFFER-1, 0)) <=0 )error("No can read from socket");
+if((recv(socket, buffer, SIZEBUFFER-1, 0)) <=0 )
+{
+fprintf(stderr,"No can read from socket");
+return -1;
+}
 #else
-if(read(socket,buffer,SIZEBUFFER-1) == -1)error("No can read from socket");
+if(read(socket,buffer,SIZEBUFFER-1) == -1)
+{
+fprintf(stderr,"No can read from socket");
+return -1;
+}
 #endif
 }
 

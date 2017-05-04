@@ -12,7 +12,8 @@ static char * HOST;
 static int PORT;
 static char * USR;
 static char * PSWRD;
-
+static char * noError = "{\"error\": null, \"id\": 2, \"result\": true}";
+static char * DiffiCulty = "{\"params\": [%f], \"id\": null, \"method\": \"mining.set_difficulty\"}";
 block latest;
 /*
 Parse
@@ -58,6 +59,7 @@ if(strstr(tmp,"401") != NULL) error("Not good pass or login for coin");
 close(Coin);
 return tmp;
 }
+//{\"id\": 1, \"result\": [[\"mining.notify\", \"ae6812eb4cd7735a302a8a9dd95cf71f\"], \"08000002\", 4], \"error\": null}
 
 void SetBlock(int * socket)
 {
@@ -81,12 +83,43 @@ void SetBlock(int * socket)
  free(latest.target);
 
 }
+#warning this not correct worke!
+void StratumReceiveClient(int * socket)
+{
+char tmp[MINSIZE];
+int count =0 ; // shitcode228
+while(1)
 
+{
+/*
+{"id": 1, "method": "mining.subscribe", "params": ["cpuminer/2.3.2"]}
+{"id": 2, "method": "mining.authorize", "params": ["gostcoinrpc", ""]}
+*/
+ readFrom(*socket,tmp);
+ if(strstr(tmp,"mining.authorize") != NULL) if(getUser(tmp)) printf("Worked?\n");
+ printf("Written: %s\n",tmp);
+ if(*tmp == 0) count++;
+ if(count > 15) break;
+}
+close(*socket);
+}
 void ToStratumClient(int socket)
 {
- while(1)
- {
- sleep(5);
+ pthread_t recvFromUser;
+ pthread_create(&recvFromUser,NULL,StratumReceiveClient,&socket);
+ char tmp[MINSIZE];
+ writeTo(socket,"{\"id\": 1, \"result\": [[\"mining.notify\", \"1\"], \"1\", 1], \"error\": null}");
+ writeTo(socket,noError);
  SetBlock(&socket);
- } 
+ sprintf(tmp,DiffiCulty,latest.difficulty);
+ writeTo(socket,tmp);
+while(1)
+
+{
+sleep(15);
+writeTo(socket,"{\"params\": [\"0\", \"7dcf1304b04e79024066cd9481aa464e2fe17966e19edf6f33970e1fe0b60277\", \"01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff270362f401062f503253482f049b8f175308\", \"0d2f7374726174756d506f6f6c2f000000000100868591052100001976a91431482118f1d7504daf1c001cbfaf91ad580d176d88ac00000000\", [\"57351e8569cb9d036187a79fd1844fd930c1309efcd16c46af9bb9713b6ee734\", \"936ab9c33420f187acae660fcdb07ffdffa081273674f0f41e6ecc1347451d23\"], \"00000002\", \"1b44dfdb\", \"53178f9b\", true], \"id\": null, \"method\": \"mining.notify\"}");
+writeTo(socket,tmp);
+//
+}
+
 }
