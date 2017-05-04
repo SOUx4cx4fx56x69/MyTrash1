@@ -9,6 +9,12 @@
  buffer+=3;
 #define Check1(buffer) if(*buffer != '"' || *(buffer+1) != ',' || *(buffer+2) != '"' && *buffer) return 0;
 
+#define Jumping(jumpTo,buffer){\
+jumpTo = FindStartString(buffer,"\"data");\
+if(jumpTo == -1) return 0;\
+buffer+=jumpTo;\
+}
+
 char * getOnlyJson(char*buffer)
 {
 
@@ -70,10 +76,9 @@ if(*buffer == 0) return 0;
 void * first = buffer;
 if(*buffer != '{') return 0;
 
-jumpTo = FindStartString(buffer,"\"data");
-if(jumpTo == -1) return 0;
+Jumping(jumpTo,buffer);
 
-buffer+=jumpTo;
+
 buffer+=7;
 if(*buffer != '"') return 0;
 *buffer++;
@@ -143,3 +148,12 @@ while(
 */
 
 }
+#ifdef Check
+#undef Check
+#endif
+#ifdef Check1
+#undef Check1
+#endif
+#ifdef Jumping
+#undef Jumping
+#endif
