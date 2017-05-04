@@ -12,6 +12,8 @@ static char * HOST;
 static int PORT;
 static char * USR;
 static char * PSWRD;
+
+block latest;
 /*
 Parse
 */
@@ -57,14 +59,20 @@ close(Coin);
 return tmp;
 }
 
+void SetBlock(int * socket)
+{
+ char * json = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getwork\", \"params\": [] }");
+ getWork(json,*socket);
+ printf("data:%s\nhash1:%s\ntarget:%s\n",latest.data,latest.hash1,latest.target);
+}
+
 void ToStratumClient(int socket)
 {
  char * meth = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }");
- char * meth1 = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getwork\", \"params\": [] }");
  float work;
  getDifficulty(meth,&work); 
  printf("%f\n",work);
- getWork(meth1,socket);
+ SetBlock(&socket);
  free(meth);
- free(meth1);
+
 }
