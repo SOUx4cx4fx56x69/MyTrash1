@@ -66,6 +66,7 @@ void SetBlock(int * socket)
  volatile valueDif difficulty_tmp;
 //
  char * getwork = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getwork\", \"params\": [] }");
+ latest.time = (unsigned)time(NULL);
  char * diff = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }");
 //
  getWork(getwork,*socket);

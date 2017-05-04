@@ -1,8 +1,31 @@
 #include "main.h"
+#include <string.h>
 void error(char*msg)
 {
  fprintf(stderr,"%s\n",msg);
  exit(-1);
+}
+
+void ReverseString(char*buffer)
+{
+#warning this function not does anyone testing
+void * firstAddrBuf = buffer;
+unsigned int c = strlen(buffer);
+char * tmp = (char*)malloc( (sizeof(char)*c) +1);
+if(tmp == NULL) error("Not can allocate memory");
+void * firstAddrTmp = tmp;
+while(*buffer)
+  *buffer++;
+for(int i = c;i--;)
+{
+ if(*buffer == '\0')*buffer--;
+ *tmp++=*buffer--;
+}
+buffer=firstAddrBuf;
+tmp=firstAddrTmp;
+while(*tmp)
+ *buffer++=*tmp++;
+free(firstAddrTmp);
 }
 
 //int CheckStrings(char*where,int len,...)

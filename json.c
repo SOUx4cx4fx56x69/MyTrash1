@@ -68,7 +68,10 @@ char * buffer = getOnlyJson(buf);
 if(*buffer == 0) return 0;
 void * first = buffer;
 if(*buffer != '{') return 0;
-
+Jumping(jumpTo,buffer,"\"version");
+*buffer++;
+char * version = (char*)malloc(sizeof(char) * strlen(buffer));
+buffer+=getP(buffer,version);
 Jumping(jumpTo,buffer,"\"data");
 
 buffer+=7;
@@ -100,6 +103,8 @@ free(first);
 latest.data=strdup(data);
 latest.hash1=strdup(hash1);
 latest.target=strdup(target);
+latest.version=strdup(version);
+free(version);
 free(data);
 free(hash1);
 free(target);
