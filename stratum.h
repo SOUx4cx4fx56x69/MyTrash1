@@ -12,6 +12,7 @@ typedef struct
 char*data;
 char*hash1;
 char*target;
+float difficulty;
 }block;
 
 block latest;

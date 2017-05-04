@@ -61,21 +61,28 @@ return tmp;
 
 void SetBlock(int * socket)
 {
- char * json = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getwork\", \"params\": [] }");
- getWork(json,*socket);
- printf("data:%s\nhash1:%s\ntarget:%s\n",latest.data,latest.hash1,latest.target);
+ volatile float difficulty_tmp;
+//
+ char * getwork = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getwork\", \"params\": [] }");
+ char * diff = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }");
+//
+ getWork(getwork,*socket);
+ getDifficulty(diff,&difficulty_tmp); 
+
+ free(getwork);
+ free(diff);
+
+ latest.difficulty=difficulty_tmp;
+ difficulty_tmp=0;
+ printf("data:%s\nhash1:%s\ntarget:%s\ndifficulty:%f\n",latest.data,latest.hash1,latest.target,latest.difficulty);
+
  free(latest.data);
  free(latest.hash1);
  free(latest.target);
+
 }
 
 void ToStratumClient(int socket)
 {
- char * meth = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }");
- float work;
- getDifficulty(meth,&work); 
- printf("%f\n",work);
  SetBlock(&socket);
- free(meth);
-
 }
