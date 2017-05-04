@@ -9,8 +9,8 @@
  buffer+=3;
 #define Check1(buffer) if(*buffer != '"' || *(buffer+1) != ',' || *(buffer+2) != '"' && *buffer) return 0;
 
-#define Jumping(jumpTo,buffer){\
-jumpTo = FindStartString(buffer,"\"data");\
+#define Jumping(jumpTo,buffer,string){\
+jumpTo = FindStartString(buffer,string);\
 if(jumpTo == -1) return 0;\
 buffer+=jumpTo;\
 }
@@ -76,7 +76,7 @@ if(*buffer == 0) return 0;
 void * first = buffer;
 if(*buffer != '{') return 0;
 
-Jumping(jumpTo,buffer);
+Jumping(jumpTo,buffer,"\"data");
 
 
 buffer+=7;
