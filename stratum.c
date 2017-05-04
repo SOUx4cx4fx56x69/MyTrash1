@@ -74,7 +74,7 @@ void SetBlock(int * socket)
 
  latest.difficulty=difficulty_tmp;
  difficulty_tmp=0;
- printf("data:%s\nhash1:%s\ntarget:%s\ndifficulty:%f\n",latest.data,latest.hash1,latest.target,latest.difficulty);
+ printf("data:%s\nhash1:%s\ntarget:%s\ndifficulty:%f\n\n",latest.data,latest.hash1,latest.target,latest.difficulty);
 
  free(latest.data);
  free(latest.hash1);
@@ -84,5 +84,9 @@ void SetBlock(int * socket)
 
 void ToStratumClient(int socket)
 {
+ while(1)
+ {
+ sleep(5);
  SetBlock(&socket);
+ } 
 }

@@ -49,6 +49,7 @@ count++;
 *buffer++;
 }
 if(!*buffer) return 0;
+*data++='\0';
 return count;
 }
 
@@ -60,6 +61,9 @@ writeTo(client,"{\"params\": [\"b3ba\", \"7dcf1304b04e79024066cd9481aa464e2fe179
 */
 void getWork(char*buf,int socket)
 {
+latest.data=NULL;
+latest.hash1=NULL;
+latest.target=NULL;
 char * buffer = getOnlyJson(buf);
 if(*buffer == 0) return 0;
 void * first = buffer;
