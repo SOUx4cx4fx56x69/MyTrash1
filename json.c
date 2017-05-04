@@ -107,37 +107,40 @@ free(target);
 
 int getUser(char*buf)
 {
+int jumpTo;
 char * buffer = getOnlyJson(buf);
 if(*buffer == 0) return 0;
 void * first = buffer;
 if(*buffer != '{') return 0;
-int jumpTo = FindStartString(buf,"mining.authorize");
-if(jumpTo == -1) return 0;
-printf("Original: %s\n",buffer);
-buffer+=jumpTo;
-printf("Unoriginal: %s\n",buffer);
+Jumping(jumpTo,buffer,"mining.authorize");
+Jumping(jumpTo,buffer,"params");
+buffer+=6;
+Jumping(jumpTo,buffer,"[");
+
+while(*buffer != '"' && *buffer) *buffer++;
+if(!*buffer)return 0;
+*buffer++;
+
+
+char * user = (char*)malloc(sizeof(char) * strlen(buffer));
+
+buffer+=getP(buffer,user);
+*buffer++;
+
+while(*buffer != '"')*buffer++;
+*buffer++;
+
+char * pass = (char*)malloc(sizeof(char) * strlen(buffer));
+buffer+=getP(buffer,pass);
+
+//
+// set to struct with id user bla-bla-bla
+//
+
+printf("test: %s\nuser:%s\npass:%s\n",buffer,user,pass);
+
 return 1;
-/*
-while(
-*buffer && 
-*buffer != '"' 
-|| *(buffer+1) != 'm' 
-|| *(buffer+2) != 'i' 
-|| *(buffer+3) != 'n' 
-|| *(buffer+4) != 'i'  
-|| *(buffer+5) != 'n'  
-|| *(buffer+6) != 'g'  
-|| *(buffer+7) != '.'  
-|| *(buffer+8) != 's'
-|| *(buffer+9) != 'u' 
-|| *(buffer+10) != 'b'
-|| *(buffer+11) != 's'
-|| *(buffer+12) != 'c'
-|| *(buffer+13) != 'r'
-|| *(buffer+14) != 'b'
-|| *(buffer+15) != 'e' 
-) *buffer++;
-*/
+
 
 }
 #ifdef Check
