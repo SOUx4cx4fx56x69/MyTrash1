@@ -20,7 +20,7 @@ buf = strdup(buffer);
 return buf;
 }
 
-int getDifficulty(char*buf,float*work)
+int getDifficulty(char*buf,valueDif * work)
 {
 char * buffer = getOnlyJson(buf);
 if(*buffer == 0) return 0;
@@ -32,7 +32,7 @@ if(*buffer != 'd' || *(buffer+1)!='i' || *(buffer+2)!='f' || *(buffer+3)!='f' ||
 || *(buffer+5)!='c' || *(buffer+6)!='u' || *(buffer+7)!='l' || *(buffer+8)!='t' || *(buffer+9)!='y')
 return 0;
 buffer+=12;
-*work = atof(buffer);
+(*work).svalue = atof(buffer);
 free(first);
 }
 

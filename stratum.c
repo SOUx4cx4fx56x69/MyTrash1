@@ -63,7 +63,7 @@ return tmp;
 
 void SetBlock(int * socket)
 {
- volatile float difficulty_tmp;
+ volatile valueDif difficulty_tmp;
 //
  char * getwork = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getwork\", \"params\": [] }");
  char * diff = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }");
@@ -74,8 +74,8 @@ void SetBlock(int * socket)
  free(getwork);
  free(diff);
 
- latest.difficulty=difficulty_tmp;
- difficulty_tmp=0;
+ latest.difficulty=difficulty_tmp.svalue;
+ difficulty_tmp.svalue=0;
  printf("data:%s\nhash1:%s\ntarget:%s\ndifficulty:%f\n\n",latest.data,latest.hash1,latest.target,latest.difficulty);
 
  free(latest.data);
