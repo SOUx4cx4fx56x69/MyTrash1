@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "stratum.h"
 #include "main.h"
-
+#include "util.h"
 //shitcode228
 #define SIZEBUFFER MINSIZE*1
 #define Check(buffer) if(*buffer != '"' || *(buffer+1) != ':' || *(buffer+2) != '"' && *buffer) return 0;\
@@ -61,6 +61,7 @@ writeTo(client,"{\"params\": [\"b3ba\", \"7dcf1304b04e79024066cd9481aa464e2fe179
 */
 int getWork(char*buf,int socket)
 {
+int jumpTo;
 latest.data=NULL;
 latest.hash1=NULL;
 latest.target=NULL;
@@ -68,18 +69,15 @@ char * buffer = getOnlyJson(buf);
 if(*buffer == 0) return 0;
 void * first = buffer;
 if(*buffer != '{') return 0;
-while(
-*buffer && 
-*buffer != '"' 
-|| *(buffer+1) != 'd' 
-|| *(buffer+2) != 'a' 
-|| *(buffer+3) != 't' 
-|| *(buffer+4) != 'a'  
-) *buffer++;
-if(*buffer != '"')return 0;
+
+jumpTo = FindStartString(buffer,"\"data");
+if(jumpTo == -1) return 0;
+
+buffer+=jumpTo;
 buffer+=7;
 if(*buffer != '"') return 0;
 *buffer++;
+
 char * data = (char*)malloc(sizeof(char) * strlen(buffer));
 buffer+=getP(buffer,data);
 Check1(buffer);
@@ -108,36 +106,6 @@ latest.target=strdup(target);
 free(data);
 free(hash1);
 free(target);
-}
-
-//int CheckStrings(char*where,int len,...)
-int CheckString(char*one,char*two,size_t len)
-{
-for(int i = 0;i<len;i++)
- {
-  if( (!*(one+i)) || (!*(two+i)) || *(one+i) != *(two+i) ) return 0;
- }
-return 1;
-}
-
-//void findinstrings(char*what,...)
-char * FindStartString(char*string,char*what)
-{
-if( !*what || !*string ) return 0;
-size_t sizeLen = strlen( what );
-int counter = 0;
-
-while(*string)
-
- {
- if(*string == *what)
-  if( CheckString(string,what,sizeLen) ) return counter;
- 
- counter++;
- *string++;
- }
-
-return -1;
 }
 
 int getUser(char*buf)
