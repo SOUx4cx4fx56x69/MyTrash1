@@ -21,14 +21,12 @@ for(int i = c;i--;)
  if(*buffer == '\0')*buffer--;
  *tmp++=*buffer--;
 }
+*tmp++='\0';
 buffer=firstAddrBuf;
 tmp=firstAddrTmp;
 
 while(*tmp)
  *buffer++=*tmp++;
-
-*buffer++='\0';
-
 free(firstAddrTmp);
 }
 

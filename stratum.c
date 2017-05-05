@@ -86,9 +86,11 @@ void SetBlock(int * socket)
  latest.difficulty=difficulty_tmp.svalue;
  difficulty_tmp.svalue=0;
  ReverseString(latest.data);
-/*
  ReverseString(latest.hash1);
  ReverseString(latest.target);
+/*
+
+
 */
  printf("data:%s\nhash1:%s\ntarget:%s\ndifficulty:%f\nversion:%s\ntimestamp:%d\nWorkers[0].login: %s\n",latest.data,latest.hash1,latest.target,latest.difficulty,latest.version,latest.time,workers[0].login);
 
