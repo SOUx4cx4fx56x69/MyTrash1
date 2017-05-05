@@ -23,8 +23,12 @@ for(int i = c;i--;)
 }
 buffer=firstAddrBuf;
 tmp=firstAddrTmp;
+
 while(*tmp)
  *buffer++=*tmp++;
+
+*buffer++='\0';
+
 free(firstAddrTmp);
 }
 
