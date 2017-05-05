@@ -22,9 +22,25 @@ return buf;
 
 int getDifficulty(char*buf,valueDif * work)
 {
+
 char * buffer = getOnlyJson(buf);
-if(*buffer == 0) return 0;
 void * first = buffer;
+if(*buffer != '{') return 0;
+int jumpTo;
+Jumping(jumpTo,buffer,"protocolversion");
+
+
+while(*buffer && *buffer != '"')*buffer++;
+if(!*buffer) return 0;
+*buffer++;
+*buffer++;
+
+char * version = (char*)malloc(sizeof(char)*strlen(buffer));
+buffer+=getP(buffer,version);
+latest.version=strdup(version);
+free(version);
+if(*buffer == 0) return 0;
+
 while(*buffer && *buffer != 'd' || *(buffer+1)!='i' || *(buffer+2)!='f' || *(buffer+3)!='f' || *(buffer+4)!='i'
 || *(buffer+5)!='c' || *(buffer+6)!='u' || *(buffer+7)!='l' || *(buffer+8)!='t' || *(buffer+9)!='y')
  *buffer++;
@@ -42,11 +58,16 @@ int count=0;
 while(*buffer != '"' && *buffer)
 
 {
-count++;
-*data=*buffer;
-*data++;
-*buffer++;
+if(*buffer != ',')
+
+{
+ count++;
+ *data=*buffer;
+ *data++;
 }
+ *buffer++;
+}
+
 if(!*buffer) return 0;
 *data++='\0';
 return count;
@@ -66,14 +87,9 @@ latest.hash1=NULL;
 latest.target=NULL;
 char * buffer = getOnlyJson(buf);
 if(*buffer == 0) return 0;
-void * first = buffer;
 if(*buffer != '{') return 0;
-Jumping(jumpTo,buffer,"\"version");
-*buffer++;
-char * version = (char*)malloc(sizeof(char) * strlen(buffer));
-buffer+=getP(buffer,version);
+void * first = buffer;
 Jumping(jumpTo,buffer,"\"data");
-
 buffer+=7;
 if(*buffer != '"') return 0;
 *buffer++;
@@ -103,8 +119,7 @@ free(first);
 latest.data=strdup(data);
 latest.hash1=strdup(hash1);
 latest.target=strdup(target);
-latest.version=strdup(version);
-free(version);
+
 free(data);
 free(hash1);
 free(target);

@@ -77,7 +77,7 @@ void SetBlock(int * socket)
 
  latest.difficulty=difficulty_tmp.svalue;
  difficulty_tmp.svalue=0;
- printf("data:%s\nhash1:%s\ntarget:%s\ndifficulty:%f\n\n",latest.data,latest.hash1,latest.target,latest.difficulty);
+ printf("data:%s\nhash1:%s\ntarget:%s\ndifficulty:%f\nversion:%s\ntimestamp:%d\n",latest.data,latest.hash1,latest.target,latest.difficulty,latest.version,latest.time);
 
  free(latest.data);
  free(latest.hash1);
