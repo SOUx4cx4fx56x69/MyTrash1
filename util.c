@@ -8,7 +8,7 @@ void error(char*msg)
 
 void ReverseString(char*buffer)
 {
-#warning this function not does anyone testing
+//#warning this function not does anyone testing
 void * firstAddrBuf = buffer;
 unsigned int c = strlen(buffer);
 char * tmp = (char*)malloc( (sizeof(char)*c) +1);
