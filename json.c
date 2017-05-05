@@ -132,6 +132,7 @@ char * buffer = getOnlyJson(buf);
 if(*buffer == 0) return 0;
 void * first = buffer;
 if(*buffer != '{') return 0;
+if(activeWorkers+1 > maxWorkers) return 0;
 Jumping(jumpTo,buffer,"mining.authorize");
 Jumping(jumpTo,buffer,"params");
 buffer+=6;
@@ -157,11 +158,11 @@ buffer+=getP(buffer,pass);
 // set to struct with id user bla-bla-bla
 //
 
-printf("test: %s\nuser:%s\npass:%s\n",buffer,user,pass);
+workers[activeWorkers].login=strdup(user);
+workers[activeWorkers].password=strdup(pass);
+workers[activeWorkers].id=activeWorkers++;
 
 return 1;
-
-
 }
 #ifdef Check
 #undef Check

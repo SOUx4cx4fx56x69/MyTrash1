@@ -14,17 +14,25 @@ static char * USR;
 static char * PSWRD;
 static char * noError = "{\"error\": null, \"id\": 2, \"result\": true}";
 static char * DiffiCulty = "{\"params\": [%f], \"id\": null, \"method\": \"mining.set_difficulty\"}";
+
+unsigned int activeWorkers=0;
+unsigned int maxWorkers;
+
+users * workers;
 block latest;
 /*
 Parse
 */
 void parse(int argCount,char**arguments)
 {
- if(argCount < 5) return error("./programm rpcAddr rpcPort rpcUser rpcPass");
+ if(argCount < 6) return error("./programm rpcAddr rpcPort rpcUser rpcPass maxWorkers");
  HOST = strdup(arguments[1]);
  PORT = atoi(arguments[2]);
  USR = strdup(arguments[3]);
  PSWRD = strdup(arguments[4]);
+ maxWorkers = atoi(arguments[5]);
+ workers = (struct users*)malloc(sizeof(struct users*) * maxWorkers);
+ printf("Max workers: %d\n",maxWorkers);
 }
 /*
 End parse
@@ -77,7 +85,7 @@ void SetBlock(int * socket)
 
  latest.difficulty=difficulty_tmp.svalue;
  difficulty_tmp.svalue=0;
- printf("data:%s\nhash1:%s\ntarget:%s\ndifficulty:%f\nversion:%s\ntimestamp:%d\n",latest.data,latest.hash1,latest.target,latest.difficulty,latest.version,latest.time);
+ printf("data:%s\nhash1:%s\ntarget:%s\ndifficulty:%f\nversion:%s\ntimestamp:%d\nWorkers[0].login: %s\n",latest.data,latest.hash1,latest.target,latest.difficulty,latest.version,latest.time,workers[0].login);
 
  free(latest.data);
  free(latest.hash1);
@@ -90,14 +98,14 @@ void StratumReceiveClient(int * socket)
 char tmp[MINSIZE];
 int count =0 ; // shitcode228
 while(1)
-
+#warning not correctly!
 {
 /*
 {"id": 1, "method": "mining.subscribe", "params": ["cpuminer/2.3.2"]}
 {"id": 2, "method": "mining.authorize", "params": ["gostcoinrpc", ""]}
 */
  readFrom(*socket,tmp);
- if(strstr(tmp,"mining.authorize") != NULL) if(getUser(tmp)) printf("Worked?\n");
+ if(strstr(tmp,"mining.authorize") != NULL) if(!getUser(tmp)) printf("Max workers:)\n");
  printf("Written: %s\n",tmp);
  if(*tmp == 0) count++;
  if(count > 15) break;

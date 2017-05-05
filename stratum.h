@@ -17,7 +17,11 @@ float difficulty;
 int time;
 }block;
 
+unsigned int activeWorkers;
+unsigned int maxWorkers;
+
 block latest;
+users * workers;
 
 #define initStratumServ(host,port,socket){\
 socket=InitServer(host,port);\
