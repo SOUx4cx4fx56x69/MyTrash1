@@ -51,36 +51,9 @@ return info;
 }
 
 
-void getDifficulty(char*buf,valueDif * work)
+void getDifficulty(valueDif * work,char**info)
 {
-
-char * buffer = getOnlyJson(buf);
-void * first = buffer;
-if(*buffer != '{') return 0;
-int jumpTo;
-Jumping(jumpTo,buffer,"protocolversion");
-
-
-while(*buffer && *buffer != '"')*buffer++;
-if(!*buffer) return 0;
-*buffer++;
-*buffer++;
-
-char * version = (char*)malloc(sizeof(char)*strlen(buffer));
-buffer+=getP(buffer,version,'"');
-latest.version=strdup(version);
-free(version);
-if(*buffer == 0) return 0;
-
-while(*buffer && *buffer != 'd' || *(buffer+1)!='i' || *(buffer+2)!='f' || *(buffer+3)!='f' || *(buffer+4)!='i'
-|| *(buffer+5)!='c' || *(buffer+6)!='u' || *(buffer+7)!='l' || *(buffer+8)!='t' || *(buffer+9)!='y')
- *buffer++;
-if(*buffer != 'd' || *(buffer+1)!='i' || *(buffer+2)!='f' || *(buffer+3)!='f' || *(buffer+4)!='i'
-|| *(buffer+5)!='c' || *(buffer+6)!='u' || *(buffer+7)!='l' || *(buffer+8)!='t' || *(buffer+9)!='y')
-return 0;
-buffer+=12;
-(*work).svalue = atof(buffer);
-free(first);
+(*work).svalue = atof(info[9]);
 }
 
 int getP(char*buffer,char*data,char byEnding)
