@@ -23,7 +23,6 @@ char*data;
 char*hash1;
 char*target;
 char*version;
-float difficulty;
 int time;
 }block;
 

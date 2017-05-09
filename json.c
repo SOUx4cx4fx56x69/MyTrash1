@@ -21,9 +21,11 @@ buf = strdup(buffer);
 return buf;
 }
 
-int getInfo(char*buf)
+int getInfo(void)
 {
-char * buffer = getOnlyJson(buf);
+char * tmp = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }");
+char * buffer = getOnlyJson(tmp);
+
 if(*buffer != '{') return 0;
 void * firstPtr = buffer;
 int jumpTo;
@@ -33,7 +35,6 @@ info = (char**)malloc(sizeof(char*) * 15);
 for(unsigned int i = 16;i--;)
  *(info+i) = (char*)malloc(sizeof(char)*SIZEBUFFER);
 applog(INFO,"Get Info\n");
-
 GET_STR(buffer,jumpTo,info,0,"version");
 
 GET_NUMBER(buffer,jumpTo,info,1,"protocolversion");
@@ -120,15 +121,8 @@ Info.errors = strcmp(info[15],"true") ? true : false;
 applog(DEBUG,"Free");
 for(unsigned int i = 15;i--;)
  free(*(info+i));
-free(buf);
+free(tmp);
 //free(firstPtr);
-}
-
-
-void getDifficulty(valueDif * work,char**info)
-{
-//printf("GetDifficulty:%s\n",info[9]);
-//(*work).svalue = atof(info[9]);
 }
 
 int getP(char*buffer,char*data,char byEnding)
@@ -160,13 +154,14 @@ this should send to socket ~
 writeTo(client,"{\"params\": [\"b3ba\", \"7dcf1304b04e79024066cd9481aa464e2fe17966e19edf6f33970e1fe0b60277\", \"01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff270362f401062f503253482f049b8f175308\", \"0d2f7374726174756d506f6f6c2f000000000100868591052100001976a91431482118f1d7504daf1c001cbfaf91ad580d176d88ac00000000\", [\"57351e8569cb9d036187a79fd1844fd930c1309efcd16c46af9bb9713b6ee734\", \"936ab9c33420f187acae660fcdb07ffdffa081273674f0f41e6ecc1347451d23\"], \"00000002\", \"1b44dfdb\", \"53178f9b\", true], \"id\": null, \"method\": \"mining.notify\"}");
 
 */
-int getWork(char*buf)
+int getWork(void)
 {
 int jumpTo;
 latest.data=NULL;
 latest.hash1=NULL;
 latest.target=NULL;
-char * buffer = getOnlyJson(buf);
+char * tmp = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getwork\", \"params\": [] }");
+char * buffer = getOnlyJson(tmp);
 if(*buffer == 0) return 0;
 if(*buffer != '{') return 0;
 void * first = buffer;
@@ -209,6 +204,7 @@ latest.target=strdup(target);
 free(data);
 free(hash1);
 free(target);
+free(tmp);
 }
 
 int getUser(char*buf)

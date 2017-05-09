@@ -55,8 +55,7 @@ void threadForGetInfoBlock(void)
 while(1)
 {
  pthread_mutex_lock(&getters);
- char * getinfo = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }");
- getInfo(getinfo);
+ getInfo();
  printf(
 "Version:%s\n"
 "ProtocolVersion:%s\n"
@@ -135,16 +134,13 @@ while(1)
  pthread_mutex_lock(&getters);
 //
  latest.time = (unsigned)time(NULL);
- char * getwork = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getwork\", \"params\": [] }");
- getWork(getwork);
+ getWork();
 //
- free(getwork);
-
  ReverseString(latest.data);
  ReverseString(latest.hash1);
 // ReverseString(latest.target);
 
- printf("data:%s\nhash1:%s\ntarget:%s\ndifficulty:%f\nversion:%s\ntimestamp:%d\nWorkers[0].login: %s\n",latest.data,latest.hash1,latest.target,latest.difficulty,latest.version,latest.time,workers[0].login);
+ printf("data:%s\nhash1:%s\ntarget:%s\ndifficulty:%f\nversion:%s\ntimestamp:%d\nWorkers[0].login: %s\n",latest.data,latest.hash1,latest.target,Info.difficulty,latest.version,latest.time,workers[0].login);
 pthread_mutex_unlock(&getters);
 sleep(SLEEPTHREAD);
 }
@@ -178,17 +174,18 @@ void ToStratumClient(int socket)
  char tmp[MINSIZE];
  writeTo(socket,"{\"id\": 1, \"result\": [[\"mining.notify\", \"1\"], \"1\", 1], \"error\": null}");
  writeTo(socket,noError);
- sprintf(tmp,DiffiCulty,latest.difficulty); // setdifficulty
+ sprintf(tmp,DiffiCulty,Info.difficulty); // setdifficulty
  writeTo(socket,tmp);
 while(1)
 
 {
 char nbits[MINSIZE]; 
 char ntime[MINSIZE]; 
-sprintf(nbits,"%02X",latest.time);
-sprintf(ntime,"%02X",latest.difficulty);
+sprintf(ntime,"%02X",latest.time);
+sprintf(nbits,"%02X",Info.difficulty);
 sprintf(tmp,notify,
 latest.target,latest.data,latest.hash1,latest.version,nbits,ntime,"false");
+applog(DEBUG,"WriteToClient: %s",tmp);
 sleep(15);
 
 
