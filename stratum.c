@@ -79,7 +79,7 @@ void SetBlock(int * socket)
  char * getwork = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getwork\", \"params\": [] }");
 //
  valueDif diff;
- char * info = getInfo(getinfo);
+ char ** info = getInfo(getinfo);
  getWork(getwork,*socket);
  getDifficulty(diff,info); 
 
