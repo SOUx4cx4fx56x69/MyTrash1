@@ -71,9 +71,20 @@ applog(DEBUG,"SetPar");
 free(Info.Version);
 free(Info.ProtocolVersion);
 free(Info.WalletVersion);
+
+Info.Blocks=0;
+Info.MoneySupply=0;
+Info.Timeoffset=0;
 free(Info.Proxy);
 free(Info.IP);
+Info.difficulty=0;
+Info.testnet=0;
 free(Info.keypololdest);
+Info.keypoolsize=0;
+Info.paytxfee=0;
+Info.mininput=0;
+Info.errors=0;
+
 Info.Version = strdup(info[0]);
 
 Info.ProtocolVersion = strdup(info[1]);
