@@ -73,20 +73,21 @@ return tmp;
 
 void SetBlock(int * socket)
 {
- volatile valueDif difficulty_tmp;
 //
- char * getwork = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getwork\", \"params\": [] }");
+ char * getinfo = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }");
  latest.time = (unsigned)time(NULL);
- char * diff = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }");
+ char * getwork = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getwork\", \"params\": [] }");
 //
+ valueDif diff;
+ char * info = getInfo(getinfo);
  getWork(getwork,*socket);
- getDifficulty(diff,&difficulty_tmp); 
+ getDifficulty(diff,info); 
 
  free(getwork);
- free(diff);
+ free(getinfo);
 
- latest.difficulty=difficulty_tmp.svalue;
- difficulty_tmp.svalue=0;
+ latest.difficulty=diff.svalue;
+ diff.svalue=0;
 
  ReverseString(latest.data);
  ReverseString(latest.hash1);
@@ -140,7 +141,6 @@ sprintf(nbits,"%02X",latest.time);
 sprintf(ntime,"%02X",latest.difficulty);
 sprintf(tmp,notify,
 latest.target,latest.data,latest.hash1,latest.version,nbits,ntime,"false");
-printf("%s\n",tmp);
 sleep(15);
 
 

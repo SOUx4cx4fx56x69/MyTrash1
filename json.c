@@ -30,30 +30,48 @@ char ** info;
 info = (char**)malloc(sizeof(char*) * 15);
 for(unsigned int i = 15;i--;)
  *(info+i) = (char*)malloc(sizeof(char)*SIZEBUFFER);
-
+printf("Get Info\n");
 GET_STR(buffer,jumpTo,info,0,"version");
-GET_STR(buffer,jumpTo,info,1,"protocolversion");
+printf("Version:%s\n",info[0]);
+GET_NUMBER(buffer,jumpTo,info,1,"protocolversion");
+printf("ProtocolVersion:%s\n",info[1]);
 GET_NUMBER(buffer,jumpTo,info,2,"walletversion");
+printf("WalletVersion:%s\n",info[2]);
 GET_NUMBER(buffer,jumpTo,info,3,"blocks");
+printf("Blocks:%s\n",info[3]);
 GET_NUMBER(buffer,jumpTo,info,4,"moneysupply");
+printf("MoneySupply:%s\n",info[4]);
 GET_NUMBER(buffer,jumpTo,info,5,"timeoffset");
+printf("Timeoffset:%s\n",info[5]);
 GET_NUMBER(buffer,jumpTo,info,6,"connections");
+printf("Connections:%s\n",info[6]);
 GET_STR(buffer,jumpTo,info,7,"proxy");
+printf("Proxy:%s\n",info[7]);
 GET_STR(buffer,jumpTo,info,8,"ip");
+printf("IP:%s\n",info[8]);
 GET_NUMBER(buffer,jumpTo,info,9,"difficulty");
+printf("difficulty:%s\n",info[9]);
 GET_NUMBER(buffer,jumpTo,info,10,"testnet");
+printf("testnet:%s\n",info[10]);
 GET_NUMBER(buffer,jumpTo,info,11,"keypoololdest");
+printf("keypololdest:%s\n",info[11]);
 GET_NUMBER(buffer,jumpTo,info,12,"keypoolsize");
+printf("keypoolsize:%s\n",info[12]);
 GET_NUMBER(buffer,jumpTo,info,13,"paytxfee");
+printf("paytxfee%s\n",info[13]);
 GET_NUMBER(buffer,jumpTo,info,14,"mininput");
-GET_STR(buffer,jumpTo,info,15,"errors");
+printf("mininput:%s\n",info[14]);
+//GET_STR(buffer,jumpTo,info,15,"errors");
+//printf("errors:%s\n",info[15]);
+printf("All\n");
 return info;
 }
 
 
 void getDifficulty(valueDif * work,char**info)
 {
-(*work).svalue = atof(info[9]);
+//printf("GetDifficulty:%s\n",info[9]);
+//(*work).svalue = atof(info[9]);
 }
 
 int getP(char*buffer,char*data,char byEnding)

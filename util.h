@@ -22,11 +22,15 @@ if(*buffer != _char) return 0;\
 Jumping(jumpTo,buffer,aString);\
 TO_BRACKETS(buffer); \
 TO_BRACKETS(buffer);\
-buffer+=getP(buffer,ArrayInfo[indexForArray],'"'); 
+jumpTo=getP(buffer,ArrayInfo[indexForArray],'"');\
+if(jumpTo == 0) ArrayInfo[indexForArray][0]='\0';\
+buffer+=jumpTo; 
 
 #define GET_NUMBER(buffer,jumpTo,ArrayInfo,indexForArray,aString)\
 Jumping(jumpTo,buffer,aString);\
 TO_BRACKETS(buffer); \
 TO_CHAR(buffer,':');\
-buffer+=getP(buffer,ArrayInfo[indexForArray],',');
+jumpTo=getP(buffer,ArrayInfo[indexForArray],'"');\
+if(jumpTo == 0) ArrayInfo[indexForArray][0]='\0';\
+buffer+=jumpTo;
 
