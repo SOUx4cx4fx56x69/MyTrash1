@@ -18,7 +18,7 @@ static const char b64_table[] = {
   '4', '5', '6', '7', '8', '9', '+', '/'
 };
 
-int __strlen__(char*src)
+int __strlen__(const unsigned char * src)
 {
 int tmp=0;
 while(*src++) tmp++;
