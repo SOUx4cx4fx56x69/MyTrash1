@@ -27,8 +27,8 @@ char * buffer = getOnlyJson(buf);
 if(*buffer != '{') return 0;
 int jumpTo;
 char ** info;
-info = (char**)malloc(sizeof(char*) * 15);
-for(unsigned int i = 15;i--;)
+info = (char**)malloc(sizeof(char*) * 16);
+for(unsigned int i = 16;i--;)
  *(info+i) = (char*)malloc(sizeof(char)*SIZEBUFFER);
 printf("Get Info\n");
 GET_STR(buffer,jumpTo,info,0,"version");
@@ -61,8 +61,8 @@ GET_NUMBER(buffer,jumpTo,info,13,"paytxfee");
 printf("paytxfee%s\n",info[13]);
 GET_NUMBER(buffer,jumpTo,info,14,"mininput");
 printf("mininput:%s\n",info[14]);
-//GET_STR(buffer,jumpTo,info,15,"errors");
-//printf("errors:%s\n",info[15]);
+GET_STR(buffer,jumpTo,info,15,"errors");
+printf("errors:%s\n",info[15]);
 printf("All\n");
 return info;
 }
