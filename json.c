@@ -103,10 +103,8 @@ Info.errors = strcmp(info[15],"true") ? true : false;
 applog(DEBUG,"Free");
 for(unsigned int i = 15;i--;)
  free(*(info+i));
-//applog(DEBUG,"Free");
 free(buf);
-//free(firstPtr);
-//need valgrind... for all
+free(firstPtr);
 }
 
 
@@ -145,7 +143,7 @@ this should send to socket ~
 writeTo(client,"{\"params\": [\"b3ba\", \"7dcf1304b04e79024066cd9481aa464e2fe17966e19edf6f33970e1fe0b60277\", \"01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff270362f401062f503253482f049b8f175308\", \"0d2f7374726174756d506f6f6c2f000000000100868591052100001976a91431482118f1d7504daf1c001cbfaf91ad580d176d88ac00000000\", [\"57351e8569cb9d036187a79fd1844fd930c1309efcd16c46af9bb9713b6ee734\", \"936ab9c33420f187acae660fcdb07ffdffa081273674f0f41e6ecc1347451d23\"], \"00000002\", \"1b44dfdb\", \"53178f9b\", true], \"id\": null, \"method\": \"mining.notify\"}");
 
 */
-int getWork(char*buf,int socket)
+int getWork(char*buf)
 {
 int jumpTo;
 latest.data=NULL;
@@ -181,6 +179,11 @@ Check(buffer);
 char * target = (char*)malloc(sizeof(char) * strlen(buffer));
 buffer+=getP(buffer,target,'"');
 free(first);
+
+free(latest.data);
+free(latest.hash1);
+free(latest.target);
+//free(latest.version);
 
 latest.data=strdup(data);
 latest.hash1=strdup(hash1);

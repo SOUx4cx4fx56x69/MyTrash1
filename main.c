@@ -8,8 +8,12 @@ int main(int argCount,char**arguments)
 { 
  parse(argCount,arguments);
  pthread_t stratum;
+ pthread_t SetInfo;
+ pthread_t setBlock;
  int Stratum;
  initStratumServ(arguments[1],3333,Stratum);
+ pthread_create(&setBlock,0,SetBlock,0);
+ pthread_create(&SetInfo,0,threadForGetInfoBlock,0);
  pthread_create(&stratum,0,AcceptClient,Stratum);
  printf("Start thread\n");
  pthread_join(stratum);

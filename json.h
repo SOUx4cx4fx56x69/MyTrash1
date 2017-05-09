@@ -1,4 +1,4 @@
-int getWork(char*buf,int socket);
+int getWork(char*buf);
 int getP(char*buffer,char*data,char byEnding);
 int CheckString(char*one,char*two,size_t len);
 int getUser(char*buf);

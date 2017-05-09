@@ -1,5 +1,9 @@
 void ToStratumClient(int socket);
 char * method(char*method);
+void SetBlock(void);
+void threadForGetInfoBlock(void);
+
+
 typedef unsigned long long ull;
 typedef enum
 {

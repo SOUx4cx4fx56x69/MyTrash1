@@ -8,6 +8,7 @@
 #include <string.h>
 #include <unistd.h>
 #warning This experemental/develop program!! 
+#define SLEEPTHREAD 15
 //lol^^
 static char * HOST;
 static int PORT;
@@ -46,46 +47,14 @@ End parse
 /*
 for method
 */
-char * method(char*method)
+
+
+void threadForGetInfoBlock(void)
 {
-int Coin = InitClient( HOST, PORT );
-char * tmp = (char*)calloc(sizeof(char),MINSIZE);
-if(tmp == NULL) error("Not can alloc memory");
-sprintf(tmp,"%s:%s",USR,PSWRD);
 
-char * token = b64_encode(tmp);
-int ContentLength = strlen(method);
-
-sprintf(tmp,
-"POST / HTTP/1.1\r\n"
-"Host: %s:%d\r\n"
-"Authorization: Basic %s\r\n"
-"Accept: */*\r\n"
-"content-type: text/plain;\r\n"
-"Content-Length: %d\r\n"
-"\r\n"
-"%s\r\n\r\n"
-,HOST,PORT,token,ContentLength,method);
-writeTo(Coin,tmp);
-readFrom(Coin,tmp);
-if(strstr(tmp,"401") != NULL) error("Not good pass or login for coin");
-close(Coin);
-return tmp;
-}
-//{\"id\": 1, \"result\": [[\"mining.notify\", \"ae6812eb4cd7735a302a8a9dd95cf71f\"], \"08000002\", 4], \"error\": null}
-
-void SetBlock(int * socket)
-{
-//
- latest.time = (unsigned)time(NULL);
- char * getwork = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getwork\", \"params\": [] }");
  char * getinfo = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }");
-//
-
-while(48)
-{
-getInfo(getinfo);
-printf(
+ getInfo(getinfo);
+ printf(
 "Version:%s\n"
 "ProtocolVersion:%s\n"
 "WalletVersion:%s\n"
@@ -120,11 +89,49 @@ Info.paytxfee,
 Info.mininput,
 Info.errors
 );
-getinfo = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }");
 applog(DEBUG,"Restart");
-sleep(15);
+sleep(SLEEPTHREAD);
+
 }
 
+
+char * method(char*method)
+{
+int Coin = InitClient( HOST, PORT );
+char * tmp = (char*)calloc(sizeof(char),MINSIZE);
+if(tmp == NULL) error("Not can alloc memory");
+sprintf(tmp,"%s:%s",USR,PSWRD);
+
+char * token = b64_encode(tmp);
+int ContentLength = strlen(method);
+
+sprintf(tmp,
+"POST / HTTP/1.1\r\n"
+"Host: %s:%d\r\n"
+"Authorization: Basic %s\r\n"
+"Accept: */*\r\n"
+"content-type: text/plain;\r\n"
+"Content-Length: %d\r\n"
+"\r\n"
+"%s\r\n\r\n"
+,HOST,PORT,token,ContentLength,method);
+writeTo(Coin,tmp);
+readFrom(Coin,tmp);
+if(strstr(tmp,"401") != NULL) error("Not good pass or login for coin");
+close(Coin);
+return tmp;
+}
+//{\"id\": 1, \"result\": [[\"mining.notify\", \"ae6812eb4cd7735a302a8a9dd95cf71f\"], \"08000002\", 4], \"error\": null}
+
+void SetBlock(void)
+{
+while(1)
+{
+//
+ latest.time = (unsigned)time(NULL);
+ char * getwork = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getwork\", \"params\": [] }");
+ getWork(getwork);
+//
  free(getwork);
 
  ReverseString(latest.data);
@@ -132,12 +139,9 @@ sleep(15);
 // ReverseString(latest.target);
 
  printf("data:%s\nhash1:%s\ntarget:%s\ndifficulty:%f\nversion:%s\ntimestamp:%d\nWorkers[0].login: %s\n",latest.data,latest.hash1,latest.target,latest.difficulty,latest.version,latest.time,workers[0].login);
-/*
- free(latest.data);
- free(latest.hash1);
- free(latest.target);
- free(latest.version);
-*/
+sleep(SLEEPTHREAD);
+}
+
 }
 #warning this not correct worke!
 void StratumReceiveClient(int * socket)
@@ -167,7 +171,6 @@ void ToStratumClient(int socket)
  char tmp[MINSIZE];
  writeTo(socket,"{\"id\": 1, \"result\": [[\"mining.notify\", \"1\"], \"1\", 1], \"error\": null}");
  writeTo(socket,noError);
- SetBlock(&socket);
  sprintf(tmp,DiffiCulty,latest.difficulty); // setdifficulty
  writeTo(socket,tmp);
 while(1)
