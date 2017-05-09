@@ -81,7 +81,7 @@ void SetBlock(int * socket)
  valueDif diff;
  char ** info = getInfo(getinfo);
  getWork(getwork,*socket);
- getDifficulty(diff,info); 
+// getDifficulty(diff,info); 
 
  free(getwork);
  free(getinfo);
