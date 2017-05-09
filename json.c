@@ -3,6 +3,7 @@
 #include "stratum.h"
 #include "main.h"
 #include "util.h"
+#include"json.h"
 //shitcode228
 #define SIZEBUFFER MINSIZE*1
 #define Check(buffer) if(*buffer != '"' || *(buffer+1) != ':' || *(buffer+2) != '"' && *buffer) return 0;\
@@ -20,7 +21,39 @@ buf = strdup(buffer);
 return buf;
 }
 
-int getDifficulty(char*buf,valueDif * work)
+char ** getInfo(char*buf)
+{
+char * buffer = getOnlyJson(buf);
+if(*buffer != '{') return 0;
+int jumpTo;
+char ** info;
+info = (char**)malloc(sizeof(char*) * 17);
+for(unsigned int i = 17;i--;)
+ *(info+i) = (char*)malloc(sizeof(char)*MINSIZE);
+
+
+/*
+Jumping(jumpTo,buffer,"version"); //version" : "v0.8.5.8-unk",
+TO_BRACKETS(buffer); //: "v0.8.5.8-unk",
+TO_BRACKETS(buffer);// v0.8.5.8-unk",
+buffer+=getP(buffer,info[0],'"'); // version
+
+Jumping(jumpTo,buffer,"protocolversion"); // protocolversion" : 70007,
+TO_BRACKETS(buffer); //  : 70007,
+TO_CHAR(buffer,':'); //  70007,
+buffer+=getP(buffer,info[1],','); // protocolversion
+*/
+//#define GET_STR(buffer,jumpTo,ArrayInfo,indexForArray,aString)
+
+GET_STR(buffer,jumpTo,info,0,"version");
+GET_STR(buffer,jumpTo,info,1,"protocolversion");
+GET_NUMBER(buffer,jumpTo,info,2,"walletversion");
+
+
+}
+
+
+void getDifficulty(char*buf,valueDif * work)
 {
 
 char * buffer = getOnlyJson(buf);
@@ -36,7 +69,7 @@ if(!*buffer) return 0;
 *buffer++;
 
 char * version = (char*)malloc(sizeof(char)*strlen(buffer));
-buffer+=getP(buffer,version);
+buffer+=getP(buffer,version,'"');
 latest.version=strdup(version);
 free(version);
 if(*buffer == 0) return 0;
@@ -52,12 +85,13 @@ buffer+=12;
 free(first);
 }
 
-int getP(char*buffer,char*data)
+int getP(char*buffer,char*data,char byEnding)
 {
 int count=0;
-while(*buffer != '"' && *buffer)
+while(*buffer != byEnding && *buffer)
 
 {
+
 if(*buffer != ',')
 
 {
@@ -65,6 +99,7 @@ if(*buffer != ',')
  *data=*buffer;
  *data++;
 }
+
  *buffer++;
 }
 
@@ -95,7 +130,7 @@ if(*buffer != '"') return 0;
 *buffer++;
 
 char * data = (char*)malloc(sizeof(char) * strlen(buffer));
-buffer+=getP(buffer,data);
+buffer+=getP(buffer,data,'"');
 Check1(buffer);
 buffer+=2;
 Jumping(jumpTo,buffer,"\"hash1");
@@ -104,7 +139,7 @@ buffer+=6;
 Check(buffer);
 
 char * hash1 = (char*)malloc(sizeof(char) * strlen(buffer));
-buffer+=getP(buffer,hash1);
+buffer+=getP(buffer,hash1,'"');
 Check1(buffer);
 buffer+=2;
 
@@ -113,7 +148,7 @@ buffer+=7;
 
 Check(buffer);
 char * target = (char*)malloc(sizeof(char) * strlen(buffer));
-buffer+=getP(buffer,target);
+buffer+=getP(buffer,target,'"');
 free(first);
 
 latest.data=strdup(data);
@@ -145,14 +180,14 @@ if(!*buffer)return 0;
 
 char * user = (char*)malloc(sizeof(char) * strlen(buffer));
 
-buffer+=getP(buffer,user);
+buffer+=getP(buffer,user,'"');
 *buffer++;
 
 while(*buffer != '"')*buffer++;
 *buffer++;
 
 char * pass = (char*)malloc(sizeof(char) * strlen(buffer));
-buffer+=getP(buffer,pass);
+buffer+=getP(buffer,pass,'"');
 
 //
 // set to struct with id user bla-bla-bla

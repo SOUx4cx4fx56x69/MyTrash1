@@ -1,5 +1,9 @@
 #include "main.h"
 #include <string.h>
+#include<stdio.h>
+#include<stdlib.h>
+
+
 void error(char*msg)
 {
  fprintf(stderr,"%s\n",msg);
@@ -59,4 +63,3 @@ while(*string)
 
 return -1;
 }
-

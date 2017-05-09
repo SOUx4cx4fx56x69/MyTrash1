@@ -12,8 +12,10 @@ static char * HOST;
 static int PORT;
 static char * USR;
 static char * PSWRD;
+
 static char * noError = "{\"error\": null, \"id\": 2, \"result\": true}";
 static char * DiffiCulty = "{\"params\": [%f], \"id\": null, \"method\": \"mining.set_difficulty\"}";
+static char * notify = "{\"params\": [\"0\", \"%s\", \"0\", \"0\", [\"%s\", \"%s\"], \"%s\", \"%s\", \"%s\", %s], \"id\": null, \"method\": \"mining.notify\"}";
 
 unsigned int activeWorkers=0;
 unsigned int maxWorkers;
@@ -85,24 +87,23 @@ void SetBlock(int * socket)
 
  latest.difficulty=difficulty_tmp.svalue;
  difficulty_tmp.svalue=0;
+
  ReverseString(latest.data);
  ReverseString(latest.hash1);
- ReverseString(latest.target);
-/*
+// ReverseString(latest.target);
 
-
-*/
  printf("data:%s\nhash1:%s\ntarget:%s\ndifficulty:%f\nversion:%s\ntimestamp:%d\nWorkers[0].login: %s\n",latest.data,latest.hash1,latest.target,latest.difficulty,latest.version,latest.time,workers[0].login);
-
+/*
  free(latest.data);
  free(latest.hash1);
  free(latest.target);
  free(latest.version);
-
+*/
 }
 #warning this not correct worke!
 void StratumReceiveClient(int * socket)
 {
+
 char tmp[MINSIZE];
 int count =0 ; // shitcode228
 while(1)
@@ -128,15 +129,22 @@ void ToStratumClient(int socket)
  writeTo(socket,"{\"id\": 1, \"result\": [[\"mining.notify\", \"1\"], \"1\", 1], \"error\": null}");
  writeTo(socket,noError);
  SetBlock(&socket);
- sprintf(tmp,DiffiCulty,latest.difficulty);
+ sprintf(tmp,DiffiCulty,latest.difficulty); // setdifficulty
  writeTo(socket,tmp);
 while(1)
 
 {
+char nbits[MINSIZE]; 
+char ntime[MINSIZE]; 
+sprintf(nbits,"%02X",latest.time);
+sprintf(ntime,"%02X",latest.difficulty);
+sprintf(tmp,notify,
+latest.target,latest.data,latest.hash1,latest.version,nbits,ntime,"false");
+printf("%s\n",tmp);
 sleep(15);
-writeTo(socket,"{\"params\": [\"0\", \"7dcf1304b04e79024066cd9481aa464e2fe17966e19edf6f33970e1fe0b60277\", \"01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff270362f401062f503253482f049b8f175308\", \"0d2f7374726174756d506f6f6c2f000000000100868591052100001976a91431482118f1d7504daf1c001cbfaf91ad580d176d88ac00000000\", [\"57351e8569cb9d036187a79fd1844fd930c1309efcd16c46af9bb9713b6ee734\", \"936ab9c33420f187acae660fcdb07ffdffa081273674f0f41e6ecc1347451d23\"], \"00000002\", \"1b44dfdb\", \"53178f9b\", true], \"id\": null, \"method\": \"mining.notify\"}");
+
+
 writeTo(socket,tmp);
-//
 }
 
 }
