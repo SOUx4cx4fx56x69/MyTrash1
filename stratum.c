@@ -52,6 +52,8 @@ for method
 
 void threadForGetInfoBlock(void)
 {
+while(1)
+{
  pthread_mutex_lock(&getters);
  char * getinfo = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }");
  getInfo(getinfo);
@@ -90,9 +92,10 @@ Info.paytxfee,
 Info.mininput,
 Info.errors
 );
-applog(DEBUG,"Restart");
-pthread_mutex_unlock(&getters);
-sleep(SLEEPTHREAD);
+ applog(DEBUG,"Restart");
+ pthread_mutex_unlock(&getters);
+ sleep(SLEEPTHREAD);
+}//while
 
 }
 
