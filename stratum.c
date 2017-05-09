@@ -9,6 +9,7 @@
 #include <unistd.h>
 #warning This experemental/develop program!! 
 #define SLEEPTHREAD 15
+pthread_mutex_t getters;
 //lol^^
 static char * HOST;
 static int PORT;
@@ -51,7 +52,7 @@ for method
 
 void threadForGetInfoBlock(void)
 {
-
+ pthread_mutex_lock(&getters);
  char * getinfo = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }");
  getInfo(getinfo);
  printf(
@@ -90,6 +91,7 @@ Info.mininput,
 Info.errors
 );
 applog(DEBUG,"Restart");
+pthread_mutex_unlock(&getters);
 sleep(SLEEPTHREAD);
 
 }
@@ -127,6 +129,7 @@ void SetBlock(void)
 {
 while(1)
 {
+ pthread_mutex_lock(&getters);
 //
  latest.time = (unsigned)time(NULL);
  char * getwork = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getwork\", \"params\": [] }");
@@ -139,6 +142,7 @@ while(1)
 // ReverseString(latest.target);
 
  printf("data:%s\nhash1:%s\ntarget:%s\ndifficulty:%f\nversion:%s\ntimestamp:%d\nWorkers[0].login: %s\n",latest.data,latest.hash1,latest.target,latest.difficulty,latest.version,latest.time,workers[0].login);
+pthread_mutex_unlock(&getters);
 sleep(SLEEPTHREAD);
 }
 
@@ -188,4 +192,6 @@ sleep(15);
 writeTo(socket,tmp);
 }
 
+
+pthread_mutex_destroy(&getters);
 }
