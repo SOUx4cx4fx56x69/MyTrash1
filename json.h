@@ -4,3 +4,4 @@ int CheckString(char*one,char*two,size_t len);
 int getUser(char*buf);
 void getDifficulty(valueDif * work,char**info);
 char * getOnlyJson(char*buffer);
+int getUser(char*buf);
