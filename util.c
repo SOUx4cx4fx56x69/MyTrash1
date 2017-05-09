@@ -1,7 +1,10 @@
 #include "main.h"
+#include "util.h"
+#include <stdarg.h>
 #include <string.h>
 #include<stdio.h>
 #include<stdlib.h>
+#include <time.h>
 
 
 void error(char*msg)
@@ -62,4 +65,41 @@ while(*string)
  }
 
 return -1;
+}
+
+void applog(unsigned int type,const char*frmt,...)
+{
+time_t tim;
+time(&tim);
+struct tm* time_info;
+time_info = localtime(&tim);
+
+char time_tmp[26];
+char buffer[36];
+strftime(time_tmp, 26, "[%Y-%m-%d %H:%M:%S]", time_info);
+
+va_list ap;
+char * arg;
+va_start(ap, frmt);
+switch(type)
+{
+case INFO:
+ sprintf(buffer,"%sINFO: ",time_tmp);
+ fprintf(stdout,"%s",buffer);
+ vfprintf (stdout,frmt, ap);
+break;
+case WARNING:
+ sprintf(buffer,"%sWARNING: ",time_tmp);
+ fprintf(stderr,"%s",buffer);
+ vfprintf (stderr, frmt, ap);
+break;
+case ERROR:
+ sprintf(buffer,"%sERROR: ",time_tmp);
+ fprintf(stderr,"%s",buffer);
+ vfprintf (stderr, frmt, ap);
+break;
+}
+puts("");
+va_end(ap);
+
 }

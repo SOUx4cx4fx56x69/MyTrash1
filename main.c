@@ -1,6 +1,7 @@
 #include "main.h"
 #include "socket.h"
 #include "stratum.h"
+#include"util.h"
 #warning This experemental/develop program!! 
 
 int main(int argCount,char**arguments)

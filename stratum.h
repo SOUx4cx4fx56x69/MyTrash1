@@ -1,5 +1,11 @@
 void ToStratumClient(int socket);
 char * method(char*method);
+typedef unsigned long long ull;
+typedef enum
+{
+false,true
+}bool;
+
 typedef struct 
 {
 char*login;
@@ -17,11 +23,32 @@ float difficulty;
 int time;
 }block;
 
+typedef struct 
+{
+char * Version;
+char * ProtocolVersion;
+char * WalletVersion;
+ull Blocks;
+float MoneySupply;
+int Timeoffset;
+unsigned int Connections;
+char * Proxy;
+char * IP;
+float difficulty;
+bool testnet;
+char * keypololdest;
+unsigned int keypoolsize;
+float paytxfee;
+float mininput;
+bool errors;
+}information;
+
 unsigned int activeWorkers;
 unsigned int maxWorkers;
 
 block latest;
 users * workers;
+information Info;
 
 #define initStratumServ(host,port,socket){\
 socket=InitServer(host,port);\

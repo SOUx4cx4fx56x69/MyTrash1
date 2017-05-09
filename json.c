@@ -21,7 +21,7 @@ buf = strdup(buffer);
 return buf;
 }
 
-char ** getInfo(char*buf)
+int getInfo(char*buf)
 {
 char * buffer = getOnlyJson(buf);
 if(*buffer != '{') return 0;
@@ -30,41 +30,60 @@ char ** info;
 info = (char**)malloc(sizeof(char*) * 15);
 for(unsigned int i = 16;i--;)
  *(info+i) = (char*)malloc(sizeof(char)*SIZEBUFFER);
-printf("Get Info\n");
+applog(INFO,"Get Info\n");
 GET_STR(buffer,jumpTo,info,0,"version");
-printf("Version:%s\n",info[0]);
+
 GET_NUMBER(buffer,jumpTo,info,1,"protocolversion");
-printf("ProtocolVersion:%s\n",info[1]);
+
 GET_NUMBER(buffer,jumpTo,info,2,"walletversion");
-printf("WalletVersion:%s\n",info[2]);
+
 GET_NUMBER(buffer,jumpTo,info,3,"blocks");
-printf("Blocks:%s\n",info[3]);
+
 GET_NUMBER(buffer,jumpTo,info,4,"moneysupply");
-printf("MoneySupply:%s\n",info[4]);
+
 GET_NUMBER(buffer,jumpTo,info,5,"timeoffset");
-printf("Timeoffset:%s\n",info[5]);
+
 GET_NUMBER(buffer,jumpTo,info,6,"connections");
-printf("Connections:%s\n",info[6]);
+
 GET_STR(buffer,jumpTo,info,7,"proxy");
-printf("Proxy:%s\n",info[7]);
+
 GET_STR(buffer,jumpTo,info,8,"ip");
-printf("IP:%s\n",info[8]);
+
 GET_NUMBER(buffer,jumpTo,info,9,"difficulty");
-printf("difficulty:%s\n",info[9]);
+
 GET_NUMBER(buffer,jumpTo,info,10,"testnet");
-printf("testnet:%s\n",info[10]);
+
 GET_NUMBER(buffer,jumpTo,info,11,"keypoololdest");
-printf("keypololdest:%s\n",info[11]);
+
 GET_NUMBER(buffer,jumpTo,info,12,"keypoolsize");
-printf("keypoolsize:%s\n",info[12]);
+
 GET_NUMBER(buffer,jumpTo,info,13,"paytxfee");
-printf("paytxfee%s\n",info[13]);
+
 GET_NUMBER(buffer,jumpTo,info,14,"mininput");
-printf("mininput:%s\n",info[14]);
+
 GET_STR(buffer,jumpTo,info,15,"errors");
-printf("errors:%s\n",info[15]);
-printf("All\n");
-return info;
+//
+Info.Version = strdup(info[0]);
+Info.ProtocolVersion = strdup(info[1]);
+Info.WalletVersion = strdup(info[2]);
+Info.Blocks = atoi(info[3]);
+Info.MoneySupply = atof(info[4]);
+Info.Timeoffset = atoi(info[5]);
+Info.Connections = atoi(info[6]);
+Info.Proxy = strdup(info[7]);
+Info.IP = strdup(info[8]);
+Info.difficulty = atof(info[9]);
+Info.testnet = strcmp(info[10],"true") ? true : false;
+Info.keypololdest = strdup(info[11]);
+Info.keypoolsize = atoi(info[12]);
+Info.paytxfee = atof(info[13]);
+Info.mininput = atof(info[14]);
+Info.errors = strcmp(info[15],"true") ? true : false;
+
+free(buf);
+//
+for(unsigned int i = 15;i--;)
+ free(*(info+i));
 }
 
 

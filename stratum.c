@@ -1,6 +1,7 @@
 #include "socket.h"
 #include "stratum.h"
 #include "main.h"
+#include"util.h"
 #include "base64.h"
 //For !(not)(less :) ) warning(lol bottom)
 #include <string.h>
@@ -19,6 +20,8 @@ static char * notify = "{\"params\": [\"0\", \"%s\", \"0\", \"0\", [\"%s\", \"%s
 
 unsigned int activeWorkers=0;
 unsigned int maxWorkers;
+
+information Info;
 
 users * workers;
 block latest;
@@ -78,16 +81,50 @@ void SetBlock(int * socket)
  latest.time = (unsigned)time(NULL);
  char * getwork = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getwork\", \"params\": [] }");
 //
- valueDif diff;
- char ** info = getInfo(getinfo);
- getWork(getwork,*socket);
-// getDifficulty(diff,info); 
+while(1)
+{
+getInfo(getinfo);
+printf(
+"Version:%s\n"
+"ProtocolVersion:%s\n"
+"WalletVersion:%s\n"
+"Blocks:%d\n"
+"MoneySupply:%f\n"
+"TimeOffset:%d\n"
+"Connections:%d\n"
+"Proxy:%s\n"
+"IP:%s\n"
+"Difficulty:%f\n"
+"testnet:%d\n"
+"keypololdest:%s\n"
+"keypoolsize:%d\n"
+"paytxfee:%f\n"
+"mininput:%f\n"
+"errors:%d\n"
+,
+Info.Version,
+Info.ProtocolVersion,
+Info.WalletVersion,
+Info.Blocks,
+Info.MoneySupply,
+Info.Timeoffset,
+Info.Connections,
+Info.Proxy,
+Info.IP,
+Info.difficulty,
+Info.testnet,
+Info.keypololdest,
+Info.keypoolsize,
+Info.paytxfee,
+Info.mininput,
+Info.errors
+);
+getinfo = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }");
+sleep(15);
+applog(INFO,"Restart");
+}
 
  free(getwork);
- free(getinfo);
-
- latest.difficulty=diff.svalue;
- diff.svalue=0;
 
  ReverseString(latest.data);
  ReverseString(latest.hash1);
