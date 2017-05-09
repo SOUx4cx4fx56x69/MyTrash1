@@ -48,7 +48,7 @@ return 1;
 }
 
 //void findinstrings(char*what,...)
-char * FindStartString(char*string,char*what)
+int FindStartString(char*string,char*what)
 {
 if( !*what || !*string ) return 0;
 size_t sizeLen = strlen( what );

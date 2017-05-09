@@ -11,6 +11,7 @@
    #define MSG_NOSIGNAL 0
    #pragma comment(lib, "ws2_32.lib")
 #else
+ #include <arpa/inet.h>
  #include <sys/socket.h>
  #include <netinet/in.h>
  #include <netdb.h>
@@ -114,7 +115,7 @@ printf("Opened new connection with %d.%d.%d.%d\n",
 
 }//function
 
-void inline
+int inline
 writeTo(int socket,char*msg)
 {
 
@@ -132,7 +133,7 @@ return -1;
 
 }
 
-void inline 
+int inline 
 readFrom(int socket,char*buffer)
 {
 memset(buffer,0,SIZEBUFFER);

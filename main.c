@@ -16,7 +16,7 @@ int main(int argCount,char**arguments)
  pthread_create(&SetInfo,0,threadForGetInfoBlock,0);
  pthread_create(&stratum,0,AcceptClient,Stratum);
  printf("Start thread\n");
- pthread_join(stratum);
+ pthread_join(stratum,NULL);
 /*
 //TEST
   readFrom(client,buffer); 

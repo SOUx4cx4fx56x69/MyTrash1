@@ -1,7 +1,7 @@
 int CheckString(char*one,char*two,size_t len);
-char * FindStartString(char*string,char*what);
+int FindStartString(char*string,char*what);
 void ReverseString(char*buffer);
-
+void applog(unsigned int type,const char*frmt,...);
 typedef enum
 {
 INFO,WARNING,ERROR,DEBUG

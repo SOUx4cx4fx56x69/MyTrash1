@@ -9,7 +9,9 @@
 #include <unistd.h>
 #warning This experemental/develop program!! 
 #define SLEEPTHREAD 15
-pthread_mutex_t getters;
+
+static pthread_mutex_t getters;
+
 //lol^^
 static char * HOST;
 static int PORT;
@@ -48,6 +50,26 @@ End parse
 /*
 for method
 */
+
+void SetBlock(void)
+{
+while(1)
+{
+ pthread_mutex_lock(&getters);
+//
+ latest.time = (unsigned)time(NULL);
+ getWork();
+//
+ ReverseString(latest.data);
+ ReverseString(latest.hash1);
+ ReverseString(latest.target);
+
+ printf("data:%s\nhash1:%s\ntarget:%s\ndifficulty:%f\nversion:%s\ntimestamp:%d\nWorkers[0].login: %s\n",latest.data,latest.hash1,latest.target,Info.difficulty,latest.version,latest.time,workers[0].login);
+pthread_mutex_unlock(&getters);
+sleep(SLEEPTHREAD);
+}//while
+
+}
 
 
 void threadForGetInfoBlock(void)
@@ -127,25 +149,7 @@ return tmp;
 }
 //{\"id\": 1, \"result\": [[\"mining.notify\", \"ae6812eb4cd7735a302a8a9dd95cf71f\"], \"08000002\", 4], \"error\": null}
 
-void SetBlock(void)
-{
-while(1)
-{
- pthread_mutex_lock(&getters);
-//
- latest.time = (unsigned)time(NULL);
- getWork();
-//
- ReverseString(latest.data);
- ReverseString(latest.hash1);
-// ReverseString(latest.target);
 
- printf("data:%s\nhash1:%s\ntarget:%s\ndifficulty:%f\nversion:%s\ntimestamp:%d\nWorkers[0].login: %s\n",latest.data,latest.hash1,latest.target,Info.difficulty,latest.version,latest.time,workers[0].login);
-pthread_mutex_unlock(&getters);
-sleep(SLEEPTHREAD);
-}
-
-}
 #warning this not correct worke!
 void StratumReceiveClient(int * socket)
 {
