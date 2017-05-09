@@ -29,27 +29,25 @@ int jumpTo;
 char ** info;
 info = (char**)malloc(sizeof(char*) * 17);
 for(unsigned int i = 17;i--;)
- *(info+i) = (char*)malloc(sizeof(char)*MINSIZE);
-
-
-/*
-Jumping(jumpTo,buffer,"version"); //version" : "v0.8.5.8-unk",
-TO_BRACKETS(buffer); //: "v0.8.5.8-unk",
-TO_BRACKETS(buffer);// v0.8.5.8-unk",
-buffer+=getP(buffer,info[0],'"'); // version
-
-Jumping(jumpTo,buffer,"protocolversion"); // protocolversion" : 70007,
-TO_BRACKETS(buffer); //  : 70007,
-TO_CHAR(buffer,':'); //  70007,
-buffer+=getP(buffer,info[1],','); // protocolversion
-*/
-//#define GET_STR(buffer,jumpTo,ArrayInfo,indexForArray,aString)
+ *(info+i) = (char*)malloc(sizeof(char)*SIZEBUFFER);
 
 GET_STR(buffer,jumpTo,info,0,"version");
 GET_STR(buffer,jumpTo,info,1,"protocolversion");
 GET_NUMBER(buffer,jumpTo,info,2,"walletversion");
-
-
+GET_NUMBER(buffer,jumpTo,info,3,"blocks");
+GET_NUMBER(buffer,jumpTo,info,4,"moneysupply");
+GET_NUMBER(buffer,jumpTo,info,5,"timeoffset");
+GET_NUMBER(buffer,jumpTo,info,6,"connections");
+GET_STR(buffer,jumpTo,info,7,"proxy");
+GET_STR(buffer,jumpTo,info,8,"ip");
+GET_NUMBER(buffer,jumpTo,info,9,"difficulty");
+GET_NUMBER(buffer,jumpTo,info,10,"testnet");
+GET_NUMBER(buffer,jumpTo,info,11,"keypoololdest");
+GET_NUMBER(buffer,jumpTo,info,12,"keypoolsize");
+GET_NUMBER(buffer,jumpTo,info,13,"paytxfee");
+GET_NUMBER(buffer,jumpTo,info,14,"mininput");
+GET_STR(buffer,jumpTo,info,15,"errors");
+return info;
 }
 
 
