@@ -95,6 +95,7 @@ while(1)
 "paytxfee:%f\n"
 "mininput:%f\n"
 "errors:%d\n"
+"Khash:%f\n"
 ,
 Info.Version,
 Info.ProtocolVersion,
@@ -111,7 +112,8 @@ Info.keypololdest,
 Info.keypoolsize,
 Info.paytxfee,
 Info.mininput,
-Info.errors
+Info.errors,
+Info.networkhashps
 );
  applog(DEBUG,"Restart");
  pthread_mutex_unlock(&getters);

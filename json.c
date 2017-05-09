@@ -31,8 +31,8 @@ void * firstPtr = buffer;
 int jumpTo;
 char ** info;
 applog(DEBUG,"Allocate\n");
-info = (char**)malloc(sizeof(char*) * 15);
-for(unsigned int i = 16;i--;)
+info = (char**)malloc(sizeof(char*) * 16);
+for(unsigned int i = 17;i--;)
  *(info+i) = (char*)malloc(sizeof(char)*SIZEBUFFER);
 applog(INFO,"Get Info\n");
 GET_STR(buffer,jumpTo,info,0,"version");
@@ -85,6 +85,7 @@ Info.keypoolsize=0;
 Info.paytxfee=0;
 Info.mininput=0;
 Info.errors=0;
+Info.networkhashps = 0;
 
 Info.Version = strdup(info[0]);
 
@@ -117,12 +118,24 @@ Info.paytxfee = atof(info[13]);
 Info.mininput = atof(info[14]);
 
 Info.errors = strcmp(info[15],"true") ? true : false;
+
+char * tmp1 = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getnetworkhashps\", \"params\": [] }");
+char * buffer1 = getOnlyJson(tmp1);
+void * firstPtr1 = buffer1;
+
+
+GET_NUMBER(buffer1,jumpTo,info,16,"result");
+Info.networkhashps = (float)atoi(info[16]) / 1024;
+
 //
 applog(DEBUG,"Free");
 for(unsigned int i = 15;i--;)
  free(*(info+i));
 free(tmp);
+free(tmp1);
+
 //free(firstPtr);
+free(firstPtr1);
 }
 
 int getP(char*buffer,char*data,char byEnding)

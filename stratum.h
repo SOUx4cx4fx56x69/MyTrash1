@@ -45,6 +45,7 @@ unsigned int keypoolsize;
 float paytxfee;
 float mininput;
 bool errors;
+float networkhashps;
 }information;
 
 unsigned int activeWorkers;
