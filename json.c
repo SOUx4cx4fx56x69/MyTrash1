@@ -68,6 +68,12 @@ GET_STR(buffer,jumpTo,info,15,"errors");
 //
 
 applog(DEBUG,"SetPar");
+free(Info.Version);
+free(Info.ProtocolVersion);
+free(Info.WalletVersion);
+free(Info.Proxy);
+free(Info.IP);
+free(Info.keypololdest);
 Info.Version = strdup(info[0]);
 
 Info.ProtocolVersion = strdup(info[1]);
@@ -104,7 +110,7 @@ applog(DEBUG,"Free");
 for(unsigned int i = 15;i--;)
  free(*(info+i));
 free(buf);
-free(firstPtr);
+//free(firstPtr);
 }
 
 
