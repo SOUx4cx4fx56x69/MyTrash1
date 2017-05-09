@@ -170,54 +170,45 @@ writeTo(client,"{\"params\": [\"b3ba\", \"7dcf1304b04e79024066cd9481aa464e2fe179
 int getWork(void)
 {
 int jumpTo;
-latest.data=NULL;
-latest.hash1=NULL;
-latest.target=NULL;
-char * tmp = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getwork\", \"params\": [] }");
-char * buffer = getOnlyJson(tmp);
-if(*buffer == 0) return 0;
-if(*buffer != '{') return 0;
-void * first = buffer;
-Jumping(jumpTo,buffer,"\"data");
-buffer+=7;
-if(*buffer != '"') return 0;
-*buffer++;
-
-char * data = (char*)malloc(sizeof(char) * strlen(buffer));
-buffer+=getP(buffer,data,'"');
-Check1(buffer);
-buffer+=2;
-Jumping(jumpTo,buffer,"\"hash1");
-buffer+=6;
-
-Check(buffer);
-
-char * hash1 = (char*)malloc(sizeof(char) * strlen(buffer));
-buffer+=getP(buffer,hash1,'"');
-Check1(buffer);
-buffer+=2;
-
-if(*buffer && *buffer != '"' || *(buffer+1) != 't' || *(buffer+2) != 'a' || *(buffer+3) != 'r' || *(buffer+4) != 'g' || *(buffer+5) != 'e' || *(buffer+6) != 't' || *(buffer+7) != '"') return 0;
-buffer+=7;
-
-Check(buffer);
-char * target = (char*)malloc(sizeof(char) * strlen(buffer));
-buffer+=getP(buffer,target,'"');
-free(first);
-
 free(latest.data);
 free(latest.hash1);
 free(latest.target);
-//free(latest.version);
+latest.data=NULL;
+latest.hash1=NULL;
+latest.target=NULL;
 
-latest.data=strdup(data);
-latest.hash1=strdup(hash1);
-latest.target=strdup(target);
+char * tmp = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getworkex\", \"params\": [] }");
+char * tmp1 = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getwork\", \"params\": [] }");
+char * buffer = getOnlyJson(tmp);
+char * buffer1 = getOnlyJson(tmp1);
+void * fbuffer = buffer;
+void * fbuffer1 = buffer1;
+if(*buffer == 0) return 0;
+if(*buffer != '{') return 0;
+void * first = buffer;
 
-free(data);
-free(hash1);
-free(target);
+char**work = (char**)malloc(sizeof(char*) * 4);
+for(unsigned int i = 5;i--;)
+ *(work+i) = (char*)malloc(sizeof(char)*SIZEBUFFER);
+
+GET_STR(buffer,jumpTo,work,0,"data");
+
+GET_STR(buffer,jumpTo,work,1,"target");
+
+GET_STR(buffer,jumpTo,work,2,"coinbase");
+
+GET_STR(buffer1,jumpTo,work,3,"hash1");
+
+latest.data=strdup(work[0]);
+latest.target=strdup(work[1]);
+latest.coinbase=strdup(work[2]);
+latest.hash1=strdup(work[3]);
+for(unsigned int i = 5;i--;)
+ free(*(work+i));
 free(tmp);
+free(tmp1);
+free(fbuffer);
+free(fbuffer1);
 }
 
 int getUser(char*buf)

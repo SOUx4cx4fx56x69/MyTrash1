@@ -24,6 +24,7 @@ char*data;
 char*hash1;
 char*target;
 char*version;
+char*coinbase;
 int time;
 }block;
 
