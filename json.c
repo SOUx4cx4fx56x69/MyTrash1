@@ -27,8 +27,8 @@ char * buffer = getOnlyJson(buf);
 if(*buffer != '{') return 0;
 int jumpTo;
 char ** info;
-info = (char**)malloc(sizeof(char*) * 17);
-for(unsigned int i = 17;i--;)
+info = (char**)malloc(sizeof(char*) * 15);
+for(unsigned int i = 15;i--;)
  *(info+i) = (char*)malloc(sizeof(char)*SIZEBUFFER);
 
 GET_STR(buffer,jumpTo,info,0,"version");
