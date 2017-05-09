@@ -4,7 +4,7 @@ void ReverseString(char*buffer);
 
 typedef enum
 {
-INFO,WARNING,ERROR
+INFO,WARNING,ERROR,DEBUG
 }infotype;
 
 

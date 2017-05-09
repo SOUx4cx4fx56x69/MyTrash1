@@ -25,12 +25,15 @@ int getInfo(char*buf)
 {
 char * buffer = getOnlyJson(buf);
 if(*buffer != '{') return 0;
+void * firstPtr = buffer;
 int jumpTo;
 char ** info;
+applog(DEBUG,"Allocate\n");
 info = (char**)malloc(sizeof(char*) * 15);
 for(unsigned int i = 16;i--;)
  *(info+i) = (char*)malloc(sizeof(char)*SIZEBUFFER);
 applog(INFO,"Get Info\n");
+
 GET_STR(buffer,jumpTo,info,0,"version");
 
 GET_NUMBER(buffer,jumpTo,info,1,"protocolversion");
@@ -63,27 +66,47 @@ GET_NUMBER(buffer,jumpTo,info,14,"mininput");
 
 GET_STR(buffer,jumpTo,info,15,"errors");
 //
-Info.Version = strdup(info[0]);
-Info.ProtocolVersion = strdup(info[1]);
-Info.WalletVersion = strdup(info[2]);
-Info.Blocks = atoi(info[3]);
-Info.MoneySupply = atof(info[4]);
-Info.Timeoffset = atoi(info[5]);
-Info.Connections = atoi(info[6]);
-Info.Proxy = strdup(info[7]);
-Info.IP = strdup(info[8]);
-Info.difficulty = atof(info[9]);
-Info.testnet = strcmp(info[10],"true") ? true : false;
-Info.keypololdest = strdup(info[11]);
-Info.keypoolsize = atoi(info[12]);
-Info.paytxfee = atof(info[13]);
-Info.mininput = atof(info[14]);
-Info.errors = strcmp(info[15],"true") ? true : false;
 
-free(buf);
+applog(DEBUG,"SetPar");
+Info.Version = strdup(info[0]);
+
+Info.ProtocolVersion = strdup(info[1]);
+
+Info.WalletVersion = strdup(info[2]);
+
+Info.Blocks = atoi(info[3]);
+
+Info.MoneySupply = atof(info[4]);
+
+Info.Timeoffset = atoi(info[5]);
+
+Info.Connections = atoi(info[6]);
+
+Info.Proxy = strdup(info[7]);
+
+Info.IP = strdup(info[8]);
+
+Info.difficulty = atof(info[9]);
+
+Info.testnet = strcmp(info[10],"true") ? true : false;
+
+Info.keypololdest = strdup(info[11]);
+
+Info.keypoolsize = atoi(info[12]);
+
+Info.paytxfee = atof(info[13]);
+
+Info.mininput = atof(info[14]);
+
+Info.errors = strcmp(info[15],"true") ? true : false;
 //
+applog(DEBUG,"Free");
 for(unsigned int i = 15;i--;)
  free(*(info+i));
+//applog(DEBUG,"Free");
+free(buf);
+//free(firstPtr);
+//need valgrind... for all
 }
 
 

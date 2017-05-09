@@ -77,11 +77,12 @@ return tmp;
 void SetBlock(int * socket)
 {
 //
- char * getinfo = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }");
  latest.time = (unsigned)time(NULL);
  char * getwork = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getwork\", \"params\": [] }");
+ char * getinfo = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }");
 //
-while(1)
+
+while(48)
 {
 getInfo(getinfo);
 printf(
@@ -120,8 +121,8 @@ Info.mininput,
 Info.errors
 );
 getinfo = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getinfo\", \"params\": [] }");
+applog(DEBUG,"Restart");
 sleep(15);
-applog(INFO,"Restart");
 }
 
  free(getwork);

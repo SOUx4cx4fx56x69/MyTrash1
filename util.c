@@ -98,6 +98,11 @@ case ERROR:
  fprintf(stderr,"%s",buffer);
  vfprintf (stderr, frmt, ap);
 break;
+case DEBUG:
+ sprintf(buffer,"%sDEBUG: ",time_tmp);
+ fprintf(stdout,"%s",buffer);
+ vfprintf (stdout, frmt, ap);
+break;
 }
 puts("");
 va_end(ap);
