@@ -10,7 +10,7 @@
 #warning This experemental/develop program!! 
 #define SLEEPTHREAD 15
 
-static pthread_mutex_t getters;
+
 
 //lol^^
 static char * HOST;

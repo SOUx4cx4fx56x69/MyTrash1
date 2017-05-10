@@ -4,6 +4,8 @@
 #include"util.h"
 #warning This experemental/develop program!! 
 
+pthread_mutex_t getters;
+
 int main(int argCount,char**arguments)
 { 
  parse(argCount,arguments);
@@ -11,6 +13,7 @@ int main(int argCount,char**arguments)
  pthread_t SetInfo;
  pthread_t setBlock;
  int Stratum;
+ pthread_mutex_init(&getters,NULL);
  initStratumServ(arguments[1],3333,Stratum);
  pthread_create(&setBlock,0,SetBlock,0);
  pthread_create(&SetInfo,0,threadForGetInfoBlock,0);
