@@ -61,9 +61,11 @@ while(1)
  latest.time = (unsigned)time(NULL);
  getWork();
 //
- ReverseString(latest.data);
- ReverseString(latest.hash1);
- ReverseString(latest.target);
+
+// ReverseString(latest.data);
+// ReverseString(latest.hash1);
+// ReverseString(latest.target);
+
 /*
  printf("data:%s\nhash1:%s\ntarget:%s\ndifficulty:%f\nversion:%s\ntimestamp:%d\nWorkers[0].login: %s\n",latest.data,latest.hash1,latest.target,Info.difficulty,latest.version,latest.time,workers[0].login);
 */
@@ -166,19 +168,14 @@ writeTo(*socket,tmp);
 while(1)
 #warning not correctly!
 {
-/*
-
-{"id": 1, "method": "mining.subscribe", "params": ["cpuminer/2.3.2"]}
-{"id": 2, "method": "mining.authorize", "params": ["gostcoinrpc", ""]}
-*/
  readFrom(*socket,tmp);
+ applog(DEBUG, "Written: %s\n",tmp);
  if(strstr(tmp,"mining.authorize") != NULL) 
   if(!getUser(tmp)) 
   {
    applog(INFO,"Max users on server\n");
    break;
   }
- applog(DEBUG, "Written: %s\n",tmp);
  if(*tmp == 0) break;
 }
 if(activeWorkers != 0)

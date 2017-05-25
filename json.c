@@ -193,6 +193,7 @@ fbuffer = buffer;
 GET_STR(buffer,jumpTo,work,0,"result");
 free(tmp);
 free(fbuffer);
+ReverseString(work[0]);
 latest.prevhash=strdup(work[0]);
 }
 
@@ -239,7 +240,8 @@ GET_STR(buffer1,jumpTo,work,3,"hash1");
 
 latest.data=strdup(work[0]);
 latest.target=strdup(work[1]);
-latest.coinbase=strdup(work[2]);
+ReverseString(work[2]);
+latest.coinbase=strdup( work[2] );
 latest.hash1=strdup(work[3]);
 for(unsigned int i = 5;i--;)
  free(*(work+i));
