@@ -258,6 +258,7 @@ if(*buffer == 0) return 0;
 void * first = buffer;
 if(*buffer != '{') return 0;
 if(activeWorkers+1 > maxWorkers) return 0;
+
 Jumping(jumpTo,buffer,"mining.authorize");
 Jumping(jumpTo,buffer,"params");
 buffer+=6;

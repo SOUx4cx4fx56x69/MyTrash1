@@ -17,11 +17,11 @@ static char * HOST;
 static int PORT;
 static char * USR;
 static char * PSWRD;
-
+static short jobID __attribute__((aligned(4))) = 0;
 static char * Message = "{\"id\": 0, \"method\": \"client.show_message\", \"params\": [\"%s\"]}";
 static char * noError = "{\"error\": null, \"id\": 2, \"result\": true}";
 static char * DiffiCulty = "{\"params\": [%f], \"id\": null, \"method\": \"mining.set_difficulty\"}";
-static char * notify = "{\"id\":null,\"method\":\"mining.notify\",\"params\":[\"%s\",\"%s\",\"%s\",\"\",[],\"%s\",\"%s\",\"%s\",%s]}";
+static char * notify = "{\"id\":null,\"method\":\"mining.notify\",\"params\":[\"%04x\",\"%s\",\"%s\",\"\",[],\"%s\",\"%s\",\"%s\",%s]}";
 
 unsigned int activeWorkers=0;
 unsigned int maxWorkers;
@@ -64,8 +64,9 @@ while(1)
  ReverseString(latest.data);
  ReverseString(latest.hash1);
  ReverseString(latest.target);
-
+/*
  printf("data:%s\nhash1:%s\ntarget:%s\ndifficulty:%f\nversion:%s\ntimestamp:%d\nWorkers[0].login: %s\n",latest.data,latest.hash1,latest.target,Info.difficulty,latest.version,latest.time,workers[0].login);
+*/
 pthread_mutex_unlock(&getters);
 sleep(SLEEPTHREAD);
 }//while
@@ -79,6 +80,7 @@ while(1)
 {
  pthread_mutex_lock(&getters);
  getInfo();
+/*
  printf(
 "Version:%s\n"
 "ProtocolVersion:%s\n"
@@ -116,7 +118,9 @@ Info.mininput,
 Info.errors,
 Info.networkhashps
 );
+
  applog(DEBUG,"Restart");
+*/
  pthread_mutex_unlock(&getters);
  sleep(SLEEPTHREAD);
 }//while
@@ -168,10 +172,17 @@ while(1)
 {"id": 2, "method": "mining.authorize", "params": ["gostcoinrpc", ""]}
 */
  readFrom(*socket,tmp);
- if(strstr(tmp,"mining.authorize") != NULL) if(!getUser(tmp)) printf("Max workers:)\n");
- printf("Written: %s\n",tmp);
+ if(strstr(tmp,"mining.authorize") != NULL) 
+  if(!getUser(tmp)) 
+  {
+   applog(INFO,"Max users on server\n");
+   break;
+  }
+ applog(DEBUG, "Written: %s\n",tmp);
  if(*tmp == 0) break;
 }
+if(activeWorkers != 0)
+ activeWorkers--;
 close(*socket);
 }
 
@@ -187,13 +198,17 @@ void ToStratumClient(int socket)
 while(1)
 
 {
-sprintf(tmp,notify,"76df",latest.prevhash,latest.coinbase,"70007000","01000000","57a152d0","false");
+if(jobID == 65553) jobID=0;
+sprintf(tmp,notify,jobID++,latest.prevhash,latest.coinbase,"70007000","01000000","57a152d0","false");
 /*
 Field Name	Purpose	Example
-JobID	ID of the job. Used when submitting a solved shared to the server.	76df
-PrevHash	Hash of the previous block. Used when deriving work.	7817c24aa99f3999a57dcfc8a7a834f9
+JobID	ID of the job. Used when submitting a solved shared to the server.	
+76df
+PrevHash	Hash of the previous block. Used when deriving work.	
+7817c24aa99f3999a57dcfc8a7a834f9
 2ebb442f8d519dbd000009e000000000
-CoinBase1	Other part of the block header. Used when deriving work.	d52f367013ddc74d61a4f50c0d47c4b8
+CoinBase1	Other part of the block header. Used when deriving work.	
+d52f367013ddc74d61a4f50c0d47c4b8
 e87b6d89a603a04447bcd2b110c508e3
 1d37308253d38bbe0464508f4eb1f12b
 92e6431d41b01f01518d2d9b9b64fe93
@@ -208,12 +223,20 @@ Ntime	Server's time when the job was transmitted. Already in CoinBase 1, not use
 CleanJobs	When true, discard current work and re-calculate derived work.	false
 
 
+version:  00000002 --> 02000000
+prevhash: 7dcf1304 b04e7902 4066cd94 81aa464e 2fe17966 e19edf6f 33970e1f e0b60277
+        -->   0413cf7d 02794eb0 94cd6640 4e46aa81 6679e12f 6fdf9ee1 1f0e9733 7702b6e0 // 8 ints left to right, each one flipped
+merkle:   0b1edc1c cf82d321 4423fc68 234f4946 119e39df 2cc2137e 31ebc186 191d5422 // nothing changed 
+ntime:    53178f9b --> 9b8f1753
+nbits:    1b44dfdb --> dbdf441b
+
+
 */
 applog(DEBUG,"WriteToClient: %s",tmp);
-writeTo(socket,tmp);
-sleep(150);
+if(writeTo(socket,tmp) == -1) break;
+sleep(5);
 }
 
-
+close(socket);
 pthread_mutex_destroy(&getters);
 }
