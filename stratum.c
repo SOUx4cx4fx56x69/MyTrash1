@@ -234,7 +234,7 @@ nbits:    1b44dfdb --> dbdf441b
 */
 applog(DEBUG,"WriteToClient: %s",tmp);
 if(writeTo(socket,tmp) == -1) break;
-sleep(5);
+sleep(15);
 }
 
 close(socket);
