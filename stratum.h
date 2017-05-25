@@ -22,6 +22,7 @@ typedef struct
 {
 char*data;
 char*hash1;
+char*prevhash;
 char*target;
 char*version;
 char*coinbase;

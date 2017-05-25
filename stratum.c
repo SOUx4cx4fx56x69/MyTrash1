@@ -18,9 +18,10 @@ static int PORT;
 static char * USR;
 static char * PSWRD;
 
+static char * Message = "{\"id\": 0, \"method\": \"client.show_message\", \"params\": [\"%s\"]}";
 static char * noError = "{\"error\": null, \"id\": 2, \"result\": true}";
 static char * DiffiCulty = "{\"params\": [%f], \"id\": null, \"method\": \"mining.set_difficulty\"}";
-static char * notify = "{\"params\": [\"0\", \"%s\", \"0\", \"0\", [\"%s\", \"%s\"], \"%s\", \"%s\", \"%s\", %s], \"id\": null, \"method\": \"mining.notify\"}";
+static char * notify = "{\"id\":null,\"method\":\"mining.notify\",\"params\":[\"%s\",\"%s\",\"%s\",\"\",[],\"%s\",\"%s\",\"%s\",%s]}";
 
 unsigned int activeWorkers=0;
 unsigned int maxWorkers;
@@ -145,7 +146,7 @@ sprintf(tmp,
 ,HOST,PORT,token,ContentLength,method);
 writeTo(Coin,tmp);
 readFrom(Coin,tmp);
-if(strstr(tmp,"401") != NULL) error("Not good pass or login for coin");
+if(strstr(tmp,"HTTP/1.0 401 Authorization Required") != NULL) error("Not good pass or login for RPC");
 close(Coin);
 return tmp;
 }
@@ -155,24 +156,25 @@ return tmp;
 #warning this not correct worke!
 void StratumReceiveClient(int * socket)
 {
-
 char tmp[MINSIZE];
-int count =0 ; // shitcode228
+sprintf(tmp,Message,"Hello! This experemental server");
+writeTo(*socket,tmp);
 while(1)
 #warning not correctly!
 {
 /*
+
 {"id": 1, "method": "mining.subscribe", "params": ["cpuminer/2.3.2"]}
 {"id": 2, "method": "mining.authorize", "params": ["gostcoinrpc", ""]}
 */
  readFrom(*socket,tmp);
  if(strstr(tmp,"mining.authorize") != NULL) if(!getUser(tmp)) printf("Max workers:)\n");
  printf("Written: %s\n",tmp);
- if(*tmp == 0) count++;
- if(count > 15) break;
+ if(*tmp == 0) break;
 }
 close(*socket);
 }
+
 void ToStratumClient(int socket)
 {
  pthread_t recvFromUser;
@@ -185,17 +187,31 @@ void ToStratumClient(int socket)
 while(1)
 
 {
-char nbits[MINSIZE]; 
-char ntime[MINSIZE]; 
-sprintf(ntime,"%02X",latest.time);
-sprintf(nbits,"%02X",Info.difficulty);
-sprintf(tmp,notify,
-latest.target,latest.data,latest.hash1,latest.version,nbits,ntime,"false");
+sprintf(tmp,notify,"76df",latest.prevhash,latest.coinbase,"70007000","01000000","57a152d0","false");
+/*
+Field Name	Purpose	Example
+JobID	ID of the job. Used when submitting a solved shared to the server.	76df
+PrevHash	Hash of the previous block. Used when deriving work.	7817c24aa99f3999a57dcfc8a7a834f9
+2ebb442f8d519dbd000009e000000000
+CoinBase1	Other part of the block header. Used when deriving work.	d52f367013ddc74d61a4f50c0d47c4b8
+e87b6d89a603a04447bcd2b110c508e3
+1d37308253d38bbe0464508f4eb1f12b
+92e6431d41b01f01518d2d9b9b64fe93
+010098588e9b1c650500030052a90000
+b778171a134e691e01000000b1c70000
+ce0f0000d052a1570000000000000000
+CoinBase2	Final part of the coinbase transaction. Not used.	Empty String
+MerkleBranches	Array of merkle branches. Unused at this time.	Empty Array
+BlockVersion	Decred block version. Already in CoinBase 1, not useful.	01000000
+Nbits	Encoded current network difficulty. Already in CoinBase 1, not useful.	1a1778b7
+Ntime	Server's time when the job was transmitted. Already in CoinBase 1, not useful.	57a152d0
+CleanJobs	When true, discard current work and re-calculate derived work.	false
+
+
+*/
 applog(DEBUG,"WriteToClient: %s",tmp);
-sleep(15);
-
-
 writeTo(socket,tmp);
+sleep(150);
 }
 
 

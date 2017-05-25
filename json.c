@@ -167,6 +167,35 @@ this should send to socket ~
 writeTo(client,"{\"params\": [\"b3ba\", \"7dcf1304b04e79024066cd9481aa464e2fe17966e19edf6f33970e1fe0b60277\", \"01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff270362f401062f503253482f049b8f175308\", \"0d2f7374726174756d506f6f6c2f000000000100868591052100001976a91431482118f1d7504daf1c001cbfaf91ad580d176d88ac00000000\", [\"57351e8569cb9d036187a79fd1844fd930c1309efcd16c46af9bb9713b6ee734\", \"936ab9c33420f187acae660fcdb07ffdffa081273674f0f41e6ecc1347451d23\"], \"00000002\", \"1b44dfdb\", \"53178f9b\", true], \"id\": null, \"method\": \"mining.notify\"}");
 
 */
+
+int getPrevHash(void)
+{
+int jumpTo=0;
+
+char**work = (char**)malloc(sizeof(char*) * 1);
+*work=(char*)malloc(sizeof(char)*MINSIZE);
+
+char * tmp = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getblockcount\", \"params\": [] }");
+char * buffer = getOnlyJson(tmp);
+char * fbuffer = buffer;
+GET_NUMBER(buffer,jumpTo,work,0,"result");
+free(fbuffer);
+jumpTo=0;
+free(tmp);
+
+char prevhash_[2056];
+sprintf(prevhash_,"{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getblockhash\", \"params\": [%s] }", work[0] );
+tmp=method(prevhash_);
+
+buffer  = getOnlyJson(tmp);
+fbuffer = buffer;
+
+GET_STR(buffer,jumpTo,work,0,"result");
+free(tmp);
+free(fbuffer);
+latest.prevhash=strdup(work[0]);
+}
+
 int getWork(void)
 {
 int jumpTo;
@@ -179,17 +208,26 @@ latest.target=NULL;
 
 char * tmp = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getworkex\", \"params\": [] }");
 char * tmp1 = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getwork\", \"params\": [] }");
+char**work = (char**)malloc(sizeof(char*) * 4);
+
+
+/*****/
+getPrevHash();
+/*****/
+
 char * buffer = getOnlyJson(tmp);
 char * buffer1 = getOnlyJson(tmp1);
+
+for(unsigned int i = 5;i--;)
+ *(work+i) = (char*)malloc(sizeof(char)*SIZEBUFFER);
+
 void * fbuffer = buffer;
 void * fbuffer1 = buffer1;
 if(*buffer == 0) return 0;
 if(*buffer != '{') return 0;
 void * first = buffer;
 
-char**work = (char**)malloc(sizeof(char*) * 4);
-for(unsigned int i = 5;i--;)
- *(work+i) = (char*)malloc(sizeof(char)*SIZEBUFFER);
+
 
 GET_STR(buffer,jumpTo,work,0,"data");
 
@@ -207,6 +245,7 @@ for(unsigned int i = 5;i--;)
  free(*(work+i));
 free(tmp);
 free(tmp1);
+
 free(fbuffer);
 free(fbuffer1);
 }
