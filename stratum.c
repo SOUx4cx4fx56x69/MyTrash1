@@ -160,7 +160,6 @@ return tmp;
 #warning this not correct worke!
 void StratumReceiveClient(int * socket)
 {
- FILE * test = fopen("gostcoin.txt","a+");
 char tmp[MINSIZE];
 sprintf(tmp,Message,"Hello! This experemental server");
 writeTo(*socket,tmp);
@@ -168,7 +167,6 @@ while(1)
 #warning not correctly!
 {
  readFrom(*socket,tmp);
- fprintf(test,"Written: %s\n",tmp);
  applog(DEBUG, "Written: %s\n",tmp);
  if(strstr(tmp,"mining.authorize") != NULL) 
   if(!getUser(tmp)) 
@@ -181,7 +179,7 @@ while(1)
 if(activeWorkers != 0)
  activeWorkers--;
 close(*socket);
-fclose(test);
+*socket=0;
 }
 
 void ToStratumClient(int socket)
@@ -193,7 +191,7 @@ void ToStratumClient(int socket)
  writeTo(socket,noError);
  sprintf(tmp,DiffiCulty,Info.difficulty); // setdifficulty
  writeTo(socket,tmp);
-while(1)
+while(socket)
 
 {
 if(jobID == 65553) jobID=0;
