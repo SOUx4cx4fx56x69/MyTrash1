@@ -195,7 +195,7 @@ while(socket)
 
 {
 if(jobID == 65553) jobID=0;
-sprintf(tmp,notify,jobID++,latest.previousblockhash,latest.target,"00000002",latest.curtime,latest.bits,"false");
+sprintf(tmp,notify,jobID++,latest.previousblockhash,latest.target,"02000000",latest.curtime,latest.bits,"false");
 /*
 Field Name	Purpose	Example
 JobID	ID of the job. Used when submitting a solved shared to the server.	
