@@ -11,7 +11,6 @@
 #define SLEEPTHREAD 15
 
 
-
 //lol^^
 static char * HOST;
 static int PORT;
@@ -58,7 +57,6 @@ while(1)
 {
  pthread_mutex_lock(&getters);
 //
- latest.time = (unsigned)time(NULL);
  getWork();
 //
 
@@ -162,6 +160,7 @@ return tmp;
 #warning this not correct worke!
 void StratumReceiveClient(int * socket)
 {
+ FILE * test = fopen("gostcoin.txt","a+");
 char tmp[MINSIZE];
 sprintf(tmp,Message,"Hello! This experemental server");
 writeTo(*socket,tmp);
@@ -169,6 +168,7 @@ while(1)
 #warning not correctly!
 {
  readFrom(*socket,tmp);
+ fprintf(test,"Written: %s\n",tmp);
  applog(DEBUG, "Written: %s\n",tmp);
  if(strstr(tmp,"mining.authorize") != NULL) 
   if(!getUser(tmp)) 
@@ -181,6 +181,7 @@ while(1)
 if(activeWorkers != 0)
  activeWorkers--;
 close(*socket);
+fclose(test);
 }
 
 void ToStratumClient(int socket)
@@ -196,7 +197,7 @@ while(1)
 
 {
 if(jobID == 65553) jobID=0;
-sprintf(tmp,notify,jobID++,latest.prevhash,latest.coinbase,"70007000","01000000","57a152d0","false");
+sprintf(tmp,notify,jobID++,latest.previousblockhash,latest.target,latest.version,latest.curtime,latest.bits,"false");
 /*
 Field Name	Purpose	Example
 JobID	ID of the job. Used when submitting a solved shared to the server.	
@@ -229,7 +230,7 @@ nbits:    1b44dfdb --> dbdf441b
 
 
 */
-applog(DEBUG,"WriteToClient: %s",tmp);
+//applog(DEBUG,"WriteToClient: %s",tmp);
 if(writeTo(socket,tmp) == -1) break;
 sleep(15);
 }

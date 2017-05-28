@@ -69,6 +69,7 @@ return -1;
 
 void applog(unsigned int type,const char*frmt,...)
 {
+
 time_t tim;
 time(&tim);
 struct tm* time_info;

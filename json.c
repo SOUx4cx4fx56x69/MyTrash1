@@ -30,11 +30,11 @@ if(*buffer != '{') return 0;
 void * firstPtr = buffer;
 int jumpTo;
 char ** info;
-applog(DEBUG,"Allocate\n");
+//applog(DEBUG,"Allocate\n");
 info = (char**)malloc(sizeof(char*) * 16);
 for(unsigned int i = 17;i--;)
  *(info+i) = (char*)malloc(sizeof(char)*SIZEBUFFER);
-applog(INFO,"Get Info\n");
+//applog(INFO,"Get Info\n");
 GET_STR(buffer,jumpTo,info,0,"version");
 
 GET_NUMBER(buffer,jumpTo,info,1,"protocolversion");
@@ -68,7 +68,7 @@ GET_NUMBER(buffer,jumpTo,info,14,"mininput");
 GET_STR(buffer,jumpTo,info,15,"errors");
 //
 
-applog(DEBUG,"SetPar");
+//applog(DEBUG,"SetPar");
 free(Info.Version);
 free(Info.ProtocolVersion);
 free(Info.WalletVersion);
@@ -128,7 +128,7 @@ GET_NUMBER(buffer1,jumpTo,info,16,"result");
 Info.networkhashps = (float)atoi(info[16]) / 1024;
 
 //
-applog(DEBUG,"Free");
+//applog(DEBUG,"Free");
 for(unsigned int i = 15;i--;)
  free(*(info+i));
 free(tmp);
@@ -167,89 +167,87 @@ this should send to socket ~
 writeTo(client,"{\"params\": [\"b3ba\", \"7dcf1304b04e79024066cd9481aa464e2fe17966e19edf6f33970e1fe0b60277\", \"01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff270362f401062f503253482f049b8f175308\", \"0d2f7374726174756d506f6f6c2f000000000100868591052100001976a91431482118f1d7504daf1c001cbfaf91ad580d176d88ac00000000\", [\"57351e8569cb9d036187a79fd1844fd930c1309efcd16c46af9bb9713b6ee734\", \"936ab9c33420f187acae660fcdb07ffdffa081273674f0f41e6ecc1347451d23\"], \"00000002\", \"1b44dfdb\", \"53178f9b\", true], \"id\": null, \"method\": \"mining.notify\"}");
 
 */
-
-int getPrevHash(void)
-{
-int jumpTo=0;
-
-char**work = (char**)malloc(sizeof(char*) * 1);
-*work=(char*)malloc(sizeof(char)*MINSIZE);
-
-char * tmp = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getblockcount\", \"params\": [] }");
-char * buffer = getOnlyJson(tmp);
-char * fbuffer = buffer;
-GET_NUMBER(buffer,jumpTo,work,0,"result");
-free(fbuffer);
-jumpTo=0;
-free(tmp);
-
-char prevhash_[2056];
-sprintf(prevhash_,"{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getblockhash\", \"params\": [%s] }", work[0] );
-tmp=method(prevhash_);
-
-buffer  = getOnlyJson(tmp);
-fbuffer = buffer;
-
-GET_STR(buffer,jumpTo,work,0,"result");
-free(tmp);
-free(fbuffer);
-ReverseString(work[0]);
-latest.prevhash=strdup(work[0]);
-}
-
 int getWork(void)
 {
 int jumpTo;
-free(latest.data);
-free(latest.hash1);
+free(latest.version);
+free(latest.previousblockhash);
+free(latest.coinbaseaux);
 free(latest.target);
-latest.data=NULL;
-latest.hash1=NULL;
-latest.target=NULL;
+free(latest.mintime);
+free(latest.noncerange);
+free(latest.curtime);
+free(latest.bits);
 
-char * tmp = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getworkex\", \"params\": [] }");
-char * tmp1 = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getwork\", \"params\": [] }");
-char**work = (char**)malloc(sizeof(char*) * 4);
+
+char * tmp = method("{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"getblocktemplate\", \"params\": [] }");
+char**work = (char**)malloc(sizeof(char*) * 8);
 
 
 /*****/
-getPrevHash();
+//getPrevHash();
 /*****/
 
 char * buffer = getOnlyJson(tmp);
-char * buffer1 = getOnlyJson(tmp1);
 
-for(unsigned int i = 5;i--;)
+for(unsigned int i = 9;i--;)
  *(work+i) = (char*)malloc(sizeof(char)*SIZEBUFFER);
 
 void * fbuffer = buffer;
-void * fbuffer1 = buffer1;
 if(*buffer == 0) return 0;
 if(*buffer != '{') return 0;
-void * first = buffer;
 
+GET_STR(buffer,jumpTo,work,0,"version");
 
+GET_STR(buffer,jumpTo,work,1,"previousblockhash");
 
-GET_STR(buffer,jumpTo,work,0,"data");
+GET_STR(buffer,jumpTo,work,2,"coinbaseaux");
 
-GET_STR(buffer,jumpTo,work,1,"target");
+GET_STR(buffer,jumpTo,work,3,"coinbasevalue");
 
-GET_STR(buffer,jumpTo,work,2,"coinbase");
+GET_STR(buffer,jumpTo,work,4,"target");
 
-GET_STR(buffer1,jumpTo,work,3,"hash1");
+GET_STR(buffer,jumpTo,work,5,"mintime");
 
-latest.data=strdup(work[0]);
-latest.target=strdup(work[1]);
-ReverseString(work[2]);
-latest.coinbase=strdup( work[2] );
-latest.hash1=strdup(work[3]);
-for(unsigned int i = 5;i--;)
+GET_STR(buffer,jumpTo,work,6,"noncerange");
+
+GET_STR(buffer,jumpTo,work,7,"curtime");
+
+GET_STR(buffer,jumpTo,work,8,"bits");
+if(strlen(work[0]) < 8)
+{
+ unsigned int i=0;
+ while(strlen(work[0]) < 8)
+ {
+  if(!work[0][i])
+   work[0][i]='0';
+  i++;
+ }
+}
+
+latest.version=strdup(work[0]);
+//ReverseString(work[1]);
+latest.previousblockhash=strdup(work[1]);
+
+latest.coinbaseaux=strdup( work[2] );
+
+latest.coinbasevalue=strdup(work[3]);
+
+latest.target=strdup(work[4]);
+
+latest.mintime=strdup(work[5]);
+
+latest.noncerange=strdup(work[6]);
+
+latest.curtime=strdup(work[7]);
+
+latest.bits=strdup(work[8]);
+
+for(unsigned int i = 9;i--;)
  free(*(work+i));
-free(tmp);
-free(tmp1);
 
+free(tmp);
 free(fbuffer);
-free(fbuffer1);
 }
 
 int getUser(char*buf)

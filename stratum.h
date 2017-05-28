@@ -20,13 +20,15 @@ unsigned int id;
 
 typedef struct
 {
-char*data;
-char*hash1;
-char*prevhash;
-char*target;
 char*version;
-char*coinbase;
-int time;
+char*previousblockhash;
+char*coinbaseaux;
+char*coinbasevalue;
+char*target;
+char*mintime;
+char*noncerange;
+char*curtime;
+char*bits;
 }block;
 
 typedef struct 
