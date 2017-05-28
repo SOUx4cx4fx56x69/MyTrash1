@@ -197,21 +197,21 @@ void * fbuffer = buffer;
 if(*buffer == 0) return 0;
 if(*buffer != '{') return 0;
 
-GET_STR(buffer,jumpTo,work,0,"version");
+GET_NUMBER(buffer,jumpTo,work,0,"version");
 
 GET_STR(buffer,jumpTo,work,1,"previousblockhash");
 
 GET_STR(buffer,jumpTo,work,2,"coinbaseaux");
 
-GET_STR(buffer,jumpTo,work,3,"coinbasevalue");
+GET_NUMBER(buffer,jumpTo,work,3,"coinbasevalue");
 
 GET_STR(buffer,jumpTo,work,4,"target");
 
-GET_STR(buffer,jumpTo,work,5,"mintime");
+GET_NUMBER(buffer,jumpTo,work,5,"mintime");
 
 GET_STR(buffer,jumpTo,work,6,"noncerange");
 
-GET_STR(buffer,jumpTo,work,7,"curtime");
+GET_NUMBER(buffer,jumpTo,work,7,"curtime");
 
 GET_STR(buffer,jumpTo,work,8,"bits");
 if(strlen(work[0]) < 8)
