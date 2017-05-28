@@ -214,16 +214,6 @@ GET_STR(buffer,jumpTo,work,6,"noncerange");
 GET_NUMBER(buffer,jumpTo,work,7,"curtime");
 
 GET_STR(buffer,jumpTo,work,8,"bits");
-if(strlen(work[0]) < 8)
-{
- unsigned int i=0;
- while(strlen(work[0]) < 8)
- {
-  if(!work[0][i])
-   work[0][i]='0';
-  i++;
- }
-}
 
 latest.version=strdup(work[0]);
 //ReverseString(work[1]);
@@ -238,7 +228,7 @@ latest.target=strdup(work[4]);
 latest.mintime=strdup(work[5]);
 
 latest.noncerange=strdup(work[6]);
-
+sprintf(work[7],"%08x",atoi(work[7]));
 latest.curtime=strdup(work[7]);
 
 latest.bits=strdup(work[8]);

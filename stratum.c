@@ -197,7 +197,7 @@ while(1)
 
 {
 if(jobID == 65553) jobID=0;
-sprintf(tmp,notify,jobID++,latest.previousblockhash,latest.target,latest.version,latest.curtime,latest.bits,"false");
+sprintf(tmp,notify,jobID++,latest.previousblockhash,latest.target,"00000002",latest.curtime,latest.bits,"false");
 /*
 Field Name	Purpose	Example
 JobID	ID of the job. Used when submitting a solved shared to the server.	
@@ -230,7 +230,7 @@ nbits:    1b44dfdb --> dbdf441b
 
 
 */
-//applog(DEBUG,"WriteToClient: %s",tmp);
+applog(DEBUG,"WriteToClient: %s",tmp);
 if(writeTo(socket,tmp) == -1) break;
 sleep(15);
 }
