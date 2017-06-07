@@ -229,6 +229,7 @@ while(1)
    char * hash = (char*)calloc(sizeof(char),SIZETEMPLATEHASH);
    char result[17];
    Json_Mining_Submit(hash,tmp,socket);
+   printf("Hash: %s\n",hash);
    if(!hash)
    {
     puts("Not yeah!!(Hash)");
