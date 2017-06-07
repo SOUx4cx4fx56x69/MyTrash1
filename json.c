@@ -182,8 +182,7 @@ while(what[counter]){\
 void Json_Mining_Submit(char*buf,const char*asq,int*socket)
 {
 puts("GetBlockHash");
-char * buffer = getOnlyJson((char*)asq);
-void *fisrtbuffer = buffer;
+char * buffer = asq;
 void *fisrtbuf = buf;
 unsigned int tmp_counter=0;
 #if WITHOUTSQL == 1
