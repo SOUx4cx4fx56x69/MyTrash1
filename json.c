@@ -251,7 +251,7 @@ free(work[1]);
 free(work);
 goto out;
 }
-
+puts("Catenation");
 CATENATION(buf,"02000000",tmp_counter);
 CATENATION(buf,latest.previousblockhash,tmp_counter);
 CATENATION(buf,work[0],tmp_counter);
