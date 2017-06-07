@@ -93,6 +93,7 @@ while(1)
 {
 //
  pthread_mutex_lock(&getters);
+ jobID=0;
  puts("SetBlock");
  getWork();
 //
@@ -221,12 +222,21 @@ while(1)
  {
    puts("GetBlockHash");
    char * hash = (char*)calloc(sizeof(char),SIZETEMPLATEHASH);
+   char result[17];
    Json_Mining_Submit(hash,tmp,socket);
+   if(!hash)
+   {
+    sprintf(result,Error,"");
+    writeTo(*socket,result);
+   }
+   else
+   {
+   //checkhash
    //sendresult
    //after
-   jobID++;
    pthread_mutex_unlock(&getters);
- }
+  } 
+}
  if(*tmp == 0) break;
 }
 if(activeWorkers != 0)
@@ -248,7 +258,11 @@ while(socket)
 
 {
 if(jobID == 65553) jobID=0;
-sprintf(tmp,notify,jobID,latest.previousblockhash,latest.target,"02000000",latest.curtime,latest.bits,"false");
+
+if(!jobID)
+ sprintf(tmp,notify,jobID++,latest.previousblockhash,latest.target,"02000000",latest.curtime,latest.bits,"true");
+else
+ sprintf(tmp,notify,jobID++,latest.previousblockhash,latest.target,"02000000",latest.curtime,latest.bits,"false");
 /*
 Field Name	Purpose	Example
 JobID	ID of the job. Used when submitting a solved shared to the server.	
