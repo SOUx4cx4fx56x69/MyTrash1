@@ -131,7 +131,8 @@ puts
 "-p port RPC\n"
 "-u UserName RPC\n"
 "-w Password RPC\n"
-"-m maxUsers"
+"-m maxUsers\n"
+"-i webInterface 'host:port' null/empty for disable"
 );
 exit(1);
 }

@@ -175,14 +175,16 @@ writeTo(client,"{\"params\": [\"b3ba\", \"7dcf1304b04e79024066cd9481aa464e2fe179
 
 #define CATENATION(string,what,counter)\
 counter=0;\
-while(*what){\
+while(what[counter]){\
 *string++=what[counter];\
 }
 
 void Json_Mining_Submit(char*buf,const char*asq,int*socket)
 {
+puts("GetBlockHash");
 char * buffer = getOnlyJson((char*)asq);
 if(!*buffer) goto out; // ANOMALY o.o really anomaly blyat
+printf("%s\n",buffer);
 void *fisrtbuffer = buffer;
 void *fisrtbuf = buf;
 unsigned int tmp_counter=0;

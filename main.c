@@ -17,7 +17,7 @@ int main(int argCount,char**arguments)
  int Stratum;
  pthread_mutex_init(&getters,NULL);
 // pthread_mutex_init(&senders,NULL);
- initStratumServ(arguments[1],3333,Stratum);
+ initStratumServ("127.0.0.1",3333,Stratum);
  pthread_create(&setBlock,0,SetBlock,0);
  pthread_create(&SetInfo,0,threadForGetInfo,0);
  pthread_create(&stratum,0,AcceptClient,Stratum);

@@ -82,7 +82,7 @@ USR = "gostcoinrpc";
 PSWRD=0;
 maxWorkers = 5;
  char ch;
- while ((ch = getopt (argCount, arguments, "a:p:u:m:w:h")) != -1)
+ while ((ch = getopt (argCount, arguments, "a:p:u:m:w:hi:")) != -1)
  {
   switch (ch)
   {
@@ -101,6 +101,8 @@ maxWorkers = 5;
    case 'm':
    maxWorkers = atoi(optarg);
    break;
+   case 'i':
+   break;
    case '?':
    case 'h':
    default:
@@ -116,7 +118,7 @@ maxWorkers = 5;
  maxWorkers = atoi(arguments[5]);
 */
 if(!PSWRD) help();
-printf("Host: %s\nPort: %d\n USR: %s,PSWRD: %s\nMAXWORKERS:%d\n",HOST,PORT,USR,PSWRD,maxWorkers);
+//printf("Host: %s\nPort: %d\n USR: %s,PSWRD: %s\nMAXWORKERS:%d\n",HOST,PORT,USR,PSWRD,maxWorkers);
  workers = (struct users *)malloc(sizeof(struct users*) * maxWorkers);
  printf("Max workers: %d\n",maxWorkers);
 }
@@ -255,7 +257,6 @@ while(1)
  applog(DEBUG, "Written: %s\n",tmp);
  if(strstr(tmp,"mining.submit") != NULL)
  {
-   puts("GetBlockHash");
    char * hash = (char*)calloc(sizeof(char),SIZETEMPLATEHASH);
    char result[17];
    Json_Mining_Submit(hash,tmp,socket);
