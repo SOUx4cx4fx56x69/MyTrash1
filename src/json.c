@@ -200,7 +200,7 @@ while(*buffer != '"')
 wallet[tmp_counter]='\0';
 tmp_counter=0;
 
-#if WITHOUTSQL == 0
+#if WITHOUTSQL == 0 
 if(!check_exist_wallet(wallet))
 {
 if(!*socket) goto out;
@@ -262,19 +262,25 @@ goto out;
 
 
 *buf++='\0';
+void*last_addr=buf;
 buf=tmp_adrr;
 ASCIIToBin(buf); 
 //ReverseString(buf); not reversed before, what for two reverse or im not understood?
 
 
 
+char * result0 = GOSThash_FromString(buf,512);
+char * result1 = GOSThash_FromString(result0,256);
+free(result0);
+while(buf!=last_addr)*buf++=0;
+buf = tmp_adrr;
+//shitcode one love
+last_addr=result1;
+CATENATION(buf,result1);
+result1=last_addr;
 
+free(result1);
 puts(buf);
-
-
-uint32_t digest[16] __attribute__((aligned(64)));
-sph_gost512(buf,digest,80);
-sph_gost256(digest,buf,64);
 
 
 

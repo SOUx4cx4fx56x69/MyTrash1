@@ -1,4 +1,11 @@
-void sph_gost256(void *cc, const void *data, size_t len);
-void sph_gost512(void *cc, const void *data, size_t len);
-
-
+char *GOSThash_FromString (char *string, int hashtype);
+static void GOSThash_LPS(unsigned char *a, unsigned char *result);
+static void GOSThash_X(unsigned char *k, unsigned char *a, unsigned char *result);
+static void GOSThash_L (unsigned char *a, unsigned char *result);
+static void GOSThash_S (unsigned char *a, unsigned char *result);
+static void GOSThash_P (unsigned char *a, unsigned char *result);
+static void GOSThash_plus (unsigned char *vectA, unsigned char *vectB, unsigned char *result);
+static void GOSThash_xor (unsigned char *vectA, unsigned char *vectB, unsigned char *result);
+static char *GOSThash_PrintArray (unsigned char *array, int size);
+static void GOSThash_E(unsigned char *k, unsigned char *m, unsigned char *result);
+static void GOSThash_g(unsigned char *N, unsigned char *h, unsigned char *m, unsigned char *result);
