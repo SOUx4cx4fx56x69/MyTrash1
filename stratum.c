@@ -218,11 +218,13 @@ while(1)
  readFrom(*socket,tmp);
  applog(DEBUG, "Written: %s\n",tmp);
  if(strstr(tmp,"mining.authorize") != NULL) 
+ {
   if(!getUser(tmp)) 
   {
    applog(INFO,"Max users on server\n");
    break;
   }
+ }
  else if(strstr(tmp,"mining.submit") != NULL)
  {
    puts("GetBlockHash");
