@@ -140,7 +140,6 @@ while(1)
  jobID=0;
  getWork();
 //
-
 // ReverseString(latest.data);
 // ReverseString(latest.hash1);
 // ReverseString(latest.target);

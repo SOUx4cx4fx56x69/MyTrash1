@@ -177,6 +177,10 @@ writeTo(client,"{\"params\": [\"b3ba\", \"7dcf1304b04e79024066cd9481aa464e2fe179
 while(*what){\
  *string++=*what++;\
 }
+#define CATENATION_(string,what,counter)\
+counter=0;\
+while( what[counter] )\
+ *string++=what[counter++];
 
 void Json_Mining_Submit(char*buf,const char*asq,int*socket)
 {
@@ -228,12 +232,10 @@ char ** work = (char**)malloc(sizeof(char*)*3);
 
 for(unsigned int i = 4;i--;)
  *(work+i) = (char*)malloc(sizeof(char)*SIZEBUFFER);
+
 const char * ver = "02000000";
-
 CATENATION(buf,ver);
-CATENATION(buf,latest.previousblockhash);
-
-
+CATENATION_(buf,latest.previousblockhash,tmp_counter);
 
 for(unsigned int i = 0;i<3;i++)
 {
