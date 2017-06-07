@@ -1,3 +1,4 @@
+#define WITHOUTSQL 1
 void ToStratumClient(int socket);
 char * method(char*method);
 void SetBlock(void);

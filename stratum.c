@@ -10,6 +10,8 @@
 #warning This experemental/develop program!! 
 #define SLEEPTHREAD 120
 
+#warning this value get from otebis without math podshetov
+#define SIZETEMPLATEHASH 512
 
 //lol^^
 static char * HOST;
@@ -190,8 +192,11 @@ while(1)
  else if(strstr(tmp,"mining.submit") != NULL)
  {
    puts("GetBlockHash");
+   char * hash = (char*)calloc(sizeof(char),SIZETEMPLATEHASH);
+   Json_Mining_Submit(hash,tmp);
    //sendresult
    //after
+   jobID++;
    pthread_mutex_unlock(&getters);
  }
  if(*tmp == 0) break;
@@ -215,7 +220,7 @@ while(socket)
 
 {
 if(jobID == 65553) jobID=0;
-sprintf(tmp,notify,jobID++,latest.previousblockhash,latest.target,"02000000",latest.curtime,latest.bits,"false");
+sprintf(tmp,notify,jobID,latest.previousblockhash,latest.target,"02000000",latest.curtime,latest.bits,"false");
 /*
 Field Name	Purpose	Example
 JobID	ID of the job. Used when submitting a solved shared to the server.	
