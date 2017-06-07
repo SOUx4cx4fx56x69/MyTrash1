@@ -223,7 +223,6 @@ while(1)
    char * hash = (char*)calloc(sizeof(char),SIZETEMPLATEHASH);
    char result[17];
    Json_Mining_Submit(hash,tmp,socket);
-   printf("Hash: %s\n",hash);
    if(!hash)
    {
     puts("Not yeah!!(Hash)");
@@ -232,6 +231,7 @@ while(1)
    }
    else
    {
+   printf("Hash: %s\n",hash);
    sprintf(tmp,meth,"submitblock",hash);
    char * answer = method(tmp);
    char * answer1 = getOnlyJson(answer);
