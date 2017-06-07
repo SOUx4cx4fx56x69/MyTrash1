@@ -10,7 +10,16 @@ pthread_mutex_t getters;
 
 int main(int argCount,char**arguments)
 { 
- parse(argCount,arguments);
+   puts("start\n");
+   puts("start\n");
+/*
+{"method": "mining.submit", "params": ["gostcoinrpc", "0228", "00", "1d0a45ec", "6c93746f"], "id":4}
+*/
+
+   char * hash = (char*)calloc(sizeof(char),512);
+   Json_Mining_Submit(hash,"{\"method\": \"mining.submit\", \"params\": [\"gostcoinrpc\", \"0228\", \"00\", \"1d0a45ec\", \"6c93746f\"], \"id\":4}",0);
+  puts(hash);
+ /*parse(argCount,arguments);
  pthread_t stratum;
  pthread_t SetInfo;
  pthread_t setBlock;
@@ -24,6 +33,7 @@ int main(int argCount,char**arguments)
  printf("Start thread\n");
  signal(SIGINT,closeserver);
  pthread_join(stratum,NULL);
+*/
 /*
 //TEST
   readFrom(client,buffer); 

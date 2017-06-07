@@ -271,11 +271,11 @@ ASCIIToBin(buf);
 
 puts(buf);
 
-/*
+
 uint32_t digest[16] __attribute__((aligned(64)));
 sph_gost512(buf,digest,80);
 sph_gost256(digest,buf,64);
-*/
+
 
 
 free(work[0]);
