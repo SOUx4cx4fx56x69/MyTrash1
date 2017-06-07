@@ -19,10 +19,11 @@ static int PORT;
 static char * USR;
 static char * PSWRD;
 static short jobID __attribute__((aligned(4))) = 0;
-static char * Message = "{\"id\": 0, \"method\": \"client.show_message\", \"params\": [\"%s\"]}";
-static char * noError = "{\"error\": null, \"id\": 2, \"result\": true}";
-static char * DiffiCulty = "{\"params\": [%f], \"id\": null, \"method\": \"mining.set_difficulty\"}";
-static char * notify = "{\"id\":null,\"method\":\"mining.notify\",\"params\":[\"%04x\",\"%s\",\"%s\",\"\",[],\"%s\",\"%s\",\"%s\",%s]}";
+static string Message = "{\"id\": 0, \"method\": \"client.show_message\", \"params\": [\"%s\"]}";
+static string noError = "{\"error\": null, \"id\": 2, \"result\": true}";
+static string Error = "{\"error\": %s, \"id\": 2, \"result\": false}";
+static string DiffiCulty = "{\"params\": [%f], \"id\": null, \"method\": \"mining.set_difficulty\"}";
+static string notify = "{\"id\":null,\"method\":\"mining.notify\",\"params\":[\"%04x\",\"%s\",\"%s\",\"\",[],\"%s\",\"%s\",\"%s\",%s]}";
 
 unsigned int activeWorkers=0;
 unsigned int maxWorkers;
@@ -34,6 +35,33 @@ block latest;
 /*
 Parse
 */
+
+bool check_exist_wallet(string wallet)
+{
+char tmp_ask[120];
+sprintf(tmp_ask,"{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"validateaddress\", \"params\": [\"%s\"] }",wallet);
+int jumpTo;
+char * tmp_answer = method(tmp_ask);
+char * buffer = getOnlyJson(tmp_answer);
+char**work = (char**)malloc(sizeof(char*) * 1);
+work = (char*)malloc(sizeof(char)*6);
+GET_NUMBER(buffer,jumpTo,work,0,"isvalid");
+if(strcmp(work[0],"true")) 
+{
+free(work[0]);
+free(work);
+return 1;
+}
+free(work[0]);
+free(work);
+return 0;
+}
+
+bool check_exist_user(string login)
+{
+return 0;
+}
+
 void timer_for_new_info(void)
 {
  sleep(0);
@@ -48,7 +76,7 @@ void parse(int argCount,char**arguments)
  USR = strdup(arguments[3]);
  PSWRD = strdup(arguments[4]);
  maxWorkers = atoi(arguments[5]);
- workers = (struct users*)malloc(sizeof(struct users*) * maxWorkers);
+ workers = (struct users *)malloc(sizeof(struct users*) * maxWorkers);
  printf("Max workers: %d\n",maxWorkers);
 }
 /*
@@ -193,7 +221,7 @@ while(1)
  {
    puts("GetBlockHash");
    char * hash = (char*)calloc(sizeof(char),SIZETEMPLATEHASH);
-   Json_Mining_Submit(hash,tmp);
+   Json_Mining_Submit(hash,tmp,socket);
    //sendresult
    //after
    jobID++;
@@ -213,7 +241,7 @@ void ToStratumClient(int socket)
  pthread_create(&recvFromUser,NULL,StratumReceiveClient,&socket);
  char tmp[MINSIZE];
  writeTo(socket,"{\"id\": 1, \"result\": [[\"mining.notify\", \"1\"], \"1\", 1], \"error\": null}");
- writeTo(socket,noError);
+ writeTo(socket,(char*)noError);
  sprintf(tmp,DiffiCulty,Info.difficulty); // setdifficulty
  writeTo(socket,tmp);
 while(socket)

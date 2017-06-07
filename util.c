@@ -12,7 +12,18 @@ void error(char*msg)
  fprintf(stderr,"%s\n",msg);
  exit(-1);
 }
+void ASCIIToBin(char*ascii)
+{
+while(*ascii)
+{
+ if(*ascii % 2)
+   *ascii='1';
+ else
+   *ascii='0';
+ *ascii++;
+}
 
+}
 void ReverseString(char*buffer)
 {
 //#warning this function not does anyone testing

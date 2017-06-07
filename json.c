@@ -1,9 +1,12 @@
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 #include "stratum.h"
 #include "main.h"
+#include "socket.h"
 #include "util.h"
 #include"json.h"
+#include "gost.h"
 //shitcode228
 #define SIZEBUFFER MINSIZE*1
 #define Check(buffer) if(*buffer != '"' || *(buffer+1) != ':' || *(buffer+2) != '"' && *buffer) return 0;\
@@ -167,14 +170,96 @@ this should send to socket ~
 writeTo(client,"{\"params\": [\"b3ba\", \"7dcf1304b04e79024066cd9481aa464e2fe17966e19edf6f33970e1fe0b60277\", \"01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff270362f401062f503253482f049b8f175308\", \"0d2f7374726174756d506f6f6c2f000000000100868591052100001976a91431482118f1d7504daf1c001cbfaf91ad580d176d88ac00000000\", [\"57351e8569cb9d036187a79fd1844fd930c1309efcd16c46af9bb9713b6ee734\", \"936ab9c33420f187acae660fcdb07ffdffa081273674f0f41e6ecc1347451d23\"], \"00000002\", \"1b44dfdb\", \"53178f9b\", true], \"id\": null, \"method\": \"mining.notify\"}");
 
 */
-void Json_Mining_Submit(char*buf,const char*asq)
-{
-if(!*asq) goto out; // ANOMALY o.o really anomaly blyat
-#if WITHOUTSQL == 1
+#warning not testing
 
+#define CATENATION(string,what,counter)\
+counter=0;\
+while(*what){\
+*string++=what[counter];\
+}
+
+void Json_Mining_Submit(char*buf,const char*asq,int*socket)
+{
+char * buffer = getOnlyJson((char*)asq);
+if(!*buffer) goto out; // ANOMALY o.o really anomaly blyat
+void *fisrtbuffer = buffer;
+void *fisrtbuf = buf;
+unsigned int tmp_counter=0;
+#if WITHOUTSQL == 1
+char wallet[35];
 #else
-//
+char wallet[MAXLOGINSIZE];
 #endif
+
+TO_BRACKETS(buf);
+if(!*buffer) goto out;
+while(*buffer != '"')
+ wallet[tmp_counter++]=*buffer++;
+
+#if WITHOUTSQL == 1
+if(!check_exist_wallet(wallet))
+{
+char tmp[17];
+sprintf(tmp,"{\"error\": %s, \"id\": 2, \"result\": false}","Not valide adress");
+writeTo(*socket,tmp);
+close(*socket);
+*socket=0;
+}
+#else
+/*
+if(!check_exist_user(wallet))
+{
+
+}
+*/
+#endif
+TO_BRACKETS(buffer);
+TO_BRACKETS(buffer);
+TO_BRACKETS(buffer);
+TO_BRACKETS(buffer);
+char ** work = (char**)malloc(sizeof(char*)*3);
+
+for(unsigned int i = 4;i--;)
+ *(work+i) = (char*)malloc(sizeof(char)*SIZEBUFFER);
+while(*buffer && *buffer != '"')
+{
+*work[0]++=*buffer++;
+}
+*buffer++;
+TO_BRACKETS(buffer);
+while(*buffer && *buffer != '"')
+{
+*work[1]++=*buffer++;
+}
+*buffer++;
+TO_BRACKETS(buffer);
+while(*buffer && *buffer!= '"')
+{
+*work[2]++=*buffer++;
+}
+*buffer++;
+TO_BRACKETS(buffer);
+if(!*buffer) 
+{
+free(work[2]);
+free(work[1]);
+free(work);
+goto out;
+}
+
+CATENATION(buf,"02000000",tmp_counter);
+CATENATION(buf,latest.previousblockhash,tmp_counter);
+CATENATION(buf,work[0],tmp_counter);
+CATENATION(buf,work[1],tmp_counter);
+CATENATION(buf,work[2],tmp_counter);
+ASCIIToBin(buf);
+ReverseString(buf);
+u_int32_t digest[16] __attribute__((aligned(64)));
+sph_gost512(buf,digest,80);
+sph_gost256(digest,buf,64);
+free(work[2]);
+free(work[1]);
+free(work);
 
 out:
 asm(

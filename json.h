@@ -5,3 +5,4 @@ int getUser(char*buf);
 void getDifficulty(valueDif * work,char**info);
 char * getOnlyJson(char*buffer);
 int getUser(char*buf);
+void Json_Mining_Submit(char*buf,const char*asq,int*socket);

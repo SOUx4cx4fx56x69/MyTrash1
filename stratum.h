@@ -1,11 +1,12 @@
 #define WITHOUTSQL 1
+#define MAXLOGINSIZE 120
 void ToStratumClient(int socket);
 char * method(char*method);
 void SetBlock(void);
 void threadForGetInfo(void);
 int getWork(void);
 int getInfo(void);
-
+typedef const char* string;
 typedef unsigned long long ull;
 typedef enum
 {
