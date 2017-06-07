@@ -9,7 +9,7 @@
 #include <unistd.h>
 #warning This experemental/develop program!! 
 #define SLEEPTHREAD 120
-#define SENDBLOCK 15
+#define SENDBLOCKTEMPLATE 3
 #warning this value get from otebis without math podshetov
 #define SIZETEMPLATEHASH 512
 
@@ -231,6 +231,7 @@ while(1)
    Json_Mining_Submit(hash,tmp,socket);
    if(!hash)
    {
+    puts("Not yeah!!(Hash)");
     sprintf(result,Error,"");
     writeTo(*socket,result);
    }
@@ -314,7 +315,7 @@ nbits:    1b44dfdb --> dbdf441b
 */
 //applog(DEBUG,"WriteToClient: %s",tmp);
 if(writeTo(socket,tmp) == -1) break;
-sleep(SENDBLOCK);
+sleep(SENDBLOCKTEMPLATE);
 }
 
 close(socket);
