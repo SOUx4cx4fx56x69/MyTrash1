@@ -257,6 +257,7 @@ CATENATION(buf,work[0],tmp_counter);
 CATENATION(buf,work[1],tmp_counter);
 CATENATION(buf,work[2],tmp_counter);
 *buf++='\0';
+buf=fisrtbuf;
 ASCIIToBin(buf);
 ReverseString(buf);
 uint32_t digest[16] __attribute__((aligned(64)));
