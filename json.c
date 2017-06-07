@@ -184,7 +184,6 @@ void Json_Mining_Submit(char*buf,const char*asq,int*socket)
 puts("GetBlockHash");
 char * buffer = getOnlyJson((char*)asq);
 if(!*buffer) goto out; // ANOMALY o.o really anomaly blyat
-printf("%s\n",buffer);
 void *fisrtbuffer = buffer;
 void *fisrtbuf = buf;
 unsigned int tmp_counter=0;
@@ -196,6 +195,7 @@ char wallet[MAXLOGINSIZE];
 
 TO_BRACKETS(buf);
 if(!*buffer) goto out;
+puts("GetWallet");
 while(*buffer != '"')
  wallet[tmp_counter++]=*buffer++;
 
@@ -216,6 +216,7 @@ if(!check_exist_user(wallet))
 }
 */
 #endif
+puts("GetOtherPar");
 TO_BRACKETS(buffer);
 TO_BRACKETS(buffer);
 TO_BRACKETS(buffer);
@@ -242,6 +243,7 @@ while(*buffer && *buffer!= '"')
 }
 *buffer++;
 TO_BRACKETS(buffer);
+puts("All");
 if(!*buffer) 
 {
 free(work[2]);
