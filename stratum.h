@@ -1,5 +1,6 @@
 #define WITHOUTSQL 1
 #define MAXLOGINSIZE 120
+void closeserver(void);
 void ToStratumClient(int socket);
 char * method(char*method);
 void SetBlock(void);

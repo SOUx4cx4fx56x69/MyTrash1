@@ -9,7 +9,7 @@
 #include <unistd.h>
 #warning This experemental/develop program!! 
 #define SLEEPTHREAD 120
-
+#define SENDBLOCK 15
 #warning this value get from otebis without math podshetov
 #define SIZETEMPLATEHASH 512
 
@@ -24,7 +24,7 @@ static string noError = "{\"error\": null, \"id\": 2, \"result\": true}";
 static string Error = "{\"error\": %s, \"id\": 2, \"result\": false}";
 static string DiffiCulty = "{\"params\": [%f], \"id\": null, \"method\": \"mining.set_difficulty\"}";
 static string notify = "{\"id\":null,\"method\":\"mining.notify\",\"params\":[\"%04x\",\"%s\",\"%s\",\"\",[],\"%s\",\"%s\",\"%s\",%s]}";
-
+static string meth = "{\"id\": 0, \"method\": \"%s\", \"params\": [%s]}";
 unsigned int activeWorkers=0;
 unsigned int maxWorkers;
 
@@ -35,6 +35,11 @@ block latest;
 /*
 Parse
 */
+
+void closeserver(void)
+{
+exit(1);
+}
 
 bool check_exist_wallet(string wallet)
 {
@@ -93,8 +98,8 @@ while(1)
 {
 //
  pthread_mutex_lock(&getters);
- jobID=0;
  puts("SetBlock");
+ jobID=0;
  getWork();
 //
 
@@ -231,6 +236,18 @@ while(1)
    }
    else
    {
+   sprintf(tmp,meth,"submitblock",hash);
+   char * answer = method(tmp);
+   char * answer1 = getOnlyJson(answer);
+   free(answer);
+   if(strstr(answer,"null")!=NULL)//bettery strcmp, but this in future
+   {
+    puts("Yeah?");
+   }
+   else
+   {
+    puts("Not yeah!!");
+   }
    //checkhash
    //sendresult
    //after
@@ -259,7 +276,7 @@ while(socket)
 {
 if(jobID == 65553) jobID=0;
 
-if(!jobID)
+if(jobID==0)
  sprintf(tmp,notify,jobID++,latest.previousblockhash,latest.target,"02000000",latest.curtime,latest.bits,"true");
 else
  sprintf(tmp,notify,jobID++,latest.previousblockhash,latest.target,"02000000",latest.curtime,latest.bits,"false");
@@ -297,6 +314,7 @@ nbits:    1b44dfdb --> dbdf441b
 */
 //applog(DEBUG,"WriteToClient: %s",tmp);
 if(writeTo(socket,tmp) == -1) break;
+sleep(SENDBLOCK);
 }
 
 close(socket);

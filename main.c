@@ -1,3 +1,4 @@
+#include <signal.h>
 #include "main.h"
 #include "socket.h"
 #include "stratum.h"
@@ -21,6 +22,7 @@ int main(int argCount,char**arguments)
  pthread_create(&SetInfo,0,threadForGetInfo,0);
  pthread_create(&stratum,0,AcceptClient,Stratum);
  printf("Start thread\n");
+ signal(SIGINT,closeserver);
  pthread_join(stratum,NULL);
 /*
 //TEST
