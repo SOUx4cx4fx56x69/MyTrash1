@@ -8,7 +8,7 @@
 #include <string.h>
 #include <unistd.h>
 #warning This experemental/develop program!! 
-#define SLEEPTHREAD 15
+#define SLEEPTHREAD 120
 
 
 //lol^^
@@ -32,6 +32,12 @@ block latest;
 /*
 Parse
 */
+void timer_for_new_info(void)
+{
+ sleep(0);
+ pthread_mutex_unlock(&getters);
+}
+
 void parse(int argCount,char**arguments)
 {
  if(argCount < 6) return error("./programm rpcAddr rpcPort rpcUser rpcPass maxWorkers");
@@ -55,8 +61,9 @@ void SetBlock(void)
 {
 while(1)
 {
- pthread_mutex_lock(&getters);
 //
+ pthread_mutex_lock(&getters);
+ puts("SetBlock");
  getWork();
 //
 
@@ -67,18 +74,17 @@ while(1)
 /*
  printf("data:%s\nhash1:%s\ntarget:%s\ndifficulty:%f\nversion:%s\ntimestamp:%d\nWorkers[0].login: %s\n",latest.data,latest.hash1,latest.target,Info.difficulty,latest.version,latest.time,workers[0].login);
 */
-pthread_mutex_unlock(&getters);
-sleep(SLEEPTHREAD);
+//sleep(SLEEPTHREAD);
 }//while
 
 }
 
 
-void threadForGetInfoBlock(void)
+void threadForGetInfo(void)
 {
 while(1)
 {
- pthread_mutex_lock(&getters);
+ puts("GetInfo");
  getInfo();
 /*
  printf(
@@ -121,8 +127,8 @@ Info.networkhashps
 
  applog(DEBUG,"Restart");
 */
- pthread_mutex_unlock(&getters);
  sleep(SLEEPTHREAD);
+ //pthread_mutex_lock(&getters);
 }//while
 
 }
@@ -156,6 +162,13 @@ return tmp;
 }
 //{\"id\": 1, \"result\": [[\"mining.notify\", \"ae6812eb4cd7735a302a8a9dd95cf71f\"], \"08000002\", 4], \"error\": null}
 
+#define STRSTR(string,string1,function)\
+{\
+if(strstr(string,string1) != NULL)\
+{\
+function(string1);\
+}\
+}
 
 #warning this not correct worke!
 void StratumReceiveClient(int * socket)
@@ -174,6 +187,13 @@ while(1)
    applog(INFO,"Max users on server\n");
    break;
   }
+ else if(strstr(tmp,"mining.submit") != NULL)
+ {
+   puts("GetBlockHash");
+   //sendresult
+   //after
+   pthread_mutex_unlock(&getters);
+ }
  if(*tmp == 0) break;
 }
 if(activeWorkers != 0)
@@ -228,9 +248,8 @@ nbits:    1b44dfdb --> dbdf441b
 
 
 */
-applog(DEBUG,"WriteToClient: %s",tmp);
+//applog(DEBUG,"WriteToClient: %s",tmp);
 if(writeTo(socket,tmp) == -1) break;
-sleep(15);
 }
 
 close(socket);

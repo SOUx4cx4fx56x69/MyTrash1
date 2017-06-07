@@ -5,6 +5,7 @@
 #warning This experemental/develop program!! 
 
 pthread_mutex_t getters;
+//pthread_mutex_t senders;
 
 int main(int argCount,char**arguments)
 { 
@@ -14,9 +15,10 @@ int main(int argCount,char**arguments)
  pthread_t setBlock;
  int Stratum;
  pthread_mutex_init(&getters,NULL);
+// pthread_mutex_init(&senders,NULL);
  initStratumServ(arguments[1],3333,Stratum);
  pthread_create(&setBlock,0,SetBlock,0);
- pthread_create(&SetInfo,0,threadForGetInfoBlock,0);
+ pthread_create(&SetInfo,0,threadForGetInfo,0);
  pthread_create(&stratum,0,AcceptClient,Stratum);
  printf("Start thread\n");
  pthread_join(stratum,NULL);

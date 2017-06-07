@@ -1,7 +1,7 @@
 void ToStratumClient(int socket);
 char * method(char*method);
 void SetBlock(void);
-void threadForGetInfoBlock(void);
+void threadForGetInfo(void);
 int getWork(void);
 int getInfo(void);
 
