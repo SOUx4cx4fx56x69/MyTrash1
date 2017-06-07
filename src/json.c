@@ -200,7 +200,7 @@ while(*buffer != '"')
 wallet[tmp_counter]='\0';
 tmp_counter=0;
 
-#if WITHOUTSQL == 0 
+#if WITHOUTSQL == 1
 if(!check_exist_wallet(wallet))
 {
 if(!*socket) goto out;
@@ -231,7 +231,7 @@ for(unsigned int i = 4;i--;)
 const char * ver = "02000000";
 
 CATENATION(buf,ver);
-//CATENATION(buf,latest.previousblockhash);
+CATENATION(buf,latest.previousblockhash);
 
 
 
