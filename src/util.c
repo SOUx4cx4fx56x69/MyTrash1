@@ -14,6 +14,7 @@ void error(char*msg)
 }
 void ASCIIToBin(char*ascii)
 {
+void * first = ascii;
 while(*ascii)
 {
  if(*ascii % 2)
@@ -22,7 +23,7 @@ while(*ascii)
    *ascii='0';
  *ascii++;
 }
-
+//ReverseString(ascii);
 }
 void ReverseString(char*buffer)
 {

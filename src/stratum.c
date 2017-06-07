@@ -281,6 +281,7 @@ while(1)
    {
     puts("Not yeah!!");
    }
+   free(hash);
    //checkhash
    //sendresult
    //after

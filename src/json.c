@@ -173,35 +173,37 @@ writeTo(client,"{\"params\": [\"b3ba\", \"7dcf1304b04e79024066cd9481aa464e2fe179
 */
 #warning Did not check
 
-#define CATENATION(string,what,counter)\
-counter=0;\
-while(what[counter]){\
-*string++=what[counter];\
+#define CATENATION(string,what)\
+while(*what){\
+ *string++=*what++;\
 }
 
 void Json_Mining_Submit(char*buf,const char*asq,int*socket)
 {
 puts("GetBlockHash");
-char * buffer = getOnlyJson((char*)asq);
-if(!*buffer) goto out; // ANOMALY o.o really anomaly blyat
-void *fisrtbuffer = buffer;
-void *fisrtbuf = buf;
+int jumpTo;
+char * buffer = asq;
+void * tmp_adrr=buf;
+printf("%s\n",buf);
 unsigned int tmp_counter=0;
 #if WITHOUTSQL == 1
 char wallet[35];
 #else
 char wallet[MAXLOGINSIZE];
 #endif
-
-TO_BRACKETS(buf);
+Jumping(jumpTo,buffer,"params");
+TO_BRACKETS(buffer);
+TO_BRACKETS(buffer);
 if(!*buffer) goto out;
-puts("GetWallet");
 while(*buffer != '"')
  wallet[tmp_counter++]=*buffer++;
+wallet[tmp_counter]='\0';
+tmp_counter=0;
 
-#if WITHOUTSQL == 1
+#if WITHOUTSQL == 0
 if(!check_exist_wallet(wallet))
 {
+if(!*socket) goto out;
 char tmp[17];
 sprintf(tmp,"{\"error\": %s, \"id\": 2, \"result\": false}","Not valide adress");
 writeTo(*socket,tmp);
@@ -216,7 +218,8 @@ if(!check_exist_user(wallet))
 }
 */
 #endif
-puts("GetOtherPar");
+
+//puts("GetOtherPar");
 TO_BRACKETS(buffer);
 TO_BRACKETS(buffer);
 TO_BRACKETS(buffer);
@@ -225,25 +228,28 @@ char ** work = (char**)malloc(sizeof(char*)*3);
 
 for(unsigned int i = 4;i--;)
  *(work+i) = (char*)malloc(sizeof(char)*SIZEBUFFER);
+const char * ver = "02000000";
+
+CATENATION(buf,ver);
+//CATENATION(buf,latest.previousblockhash);
+
+
+
+for(unsigned int i = 0;i<3;i++)
+{
+void *fisrtbuf = work[i];
 while(*buffer && *buffer != '"')
 {
-*work[0]++=*buffer++;
+ *work[i]++=*buffer++;
 }
 *buffer++;
 TO_BRACKETS(buffer);
-while(*buffer && *buffer != '"')
-{
-*work[1]++=*buffer++;
+*work[i]++='\0';
+work[i]=fisrtbuf;
+CATENATION(buf,work[i]);
+work[i]=fisrtbuf;
 }
-*buffer++;
-TO_BRACKETS(buffer);
-while(*buffer && *buffer!= '"')
-{
-*work[2]++=*buffer++;
-}
-*buffer++;
-TO_BRACKETS(buffer);
-puts("All");
+//puts("All");
 if(!*buffer) 
 {
 free(work[2]);
@@ -251,20 +257,30 @@ free(work[1]);
 free(work);
 goto out;
 }
-puts("Catenation");
-CATENATION(buf,"02000000",tmp_counter);
-CATENATION(buf,latest.previousblockhash,tmp_counter);
-CATENATION(buf,work[0],tmp_counter);
-CATENATION(buf,work[1],tmp_counter);
-CATENATION(buf,work[2],tmp_counter);
-ASCIIToBin(buf);
-ReverseString(buf);
+//printf("SSS: %s %s %s\n",work[0],work[1],work[2]);
+//puts("Catenation");
+
+
+*buf++='\0';
+buf=tmp_adrr;
+ASCIIToBin(buf); 
+//ReverseString(buf); not reversed before, what for two reverse or im not understood?
+
+
+
+
+puts(buf);
+
+/*
 uint32_t digest[16] __attribute__((aligned(64)));
 sph_gost512(buf,digest,80);
 sph_gost256(digest,buf,64);
-free(work[2]);
+*/
+
+
+free(work[0]);
 free(work[1]);
-free(work);
+free(work[2]);
 
 out:
 asm(
