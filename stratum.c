@@ -217,15 +217,7 @@ while(1)
 {
  readFrom(*socket,tmp);
  applog(DEBUG, "Written: %s\n",tmp);
- if(strstr(tmp,"mining.authorize") != NULL) 
- {
-  if(!getUser(tmp)) 
-  {
-   applog(INFO,"Max users on server\n");
-   break;
-  }
- }
- else if(strstr(tmp,"mining.submit") != NULL)
+ if(strstr(tmp,"mining.submit") != NULL)
  {
    puts("GetBlockHash");
    char * hash = (char*)calloc(sizeof(char),SIZETEMPLATEHASH);
@@ -258,6 +250,15 @@ while(1)
    pthread_mutex_unlock(&getters);
   } 
 }
+else if(strstr(tmp,"mining.authorize") != NULL) 
+ {
+  puts("AuthUser");
+  if(!getUser(tmp)) 
+  {
+   applog(INFO,"Max users on server\n");
+   break;
+  }
+ }
  if(*tmp == 0) break;
 }
 if(activeWorkers != 0)
