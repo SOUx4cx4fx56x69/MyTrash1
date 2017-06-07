@@ -3,6 +3,7 @@ int FindStartString(char*string,char*what);
 void ReverseString(char*buffer);
 void applog(unsigned int type,const char*frmt,...);
 void ASCIIToBin(char*ascii);
+void help(void);
 typedef enum
 {
 INFO,WARNING,ERROR,DEBUG

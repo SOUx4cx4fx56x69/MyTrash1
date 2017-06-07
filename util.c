@@ -120,3 +120,18 @@ puts("");
 va_end(ap);
 
 }
+
+void help(void)
+{
+puts
+(
+"Test stratum server for gostcoin pool\n"
+"-h get help\n"
+"-a adress RPC\n"
+"-p port RPC\n"
+"-u UserName RPC\n"
+"-w Password RPC\n"
+"-m maxUsers"
+);
+exit(1);
+}

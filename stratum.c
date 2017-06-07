@@ -75,12 +75,48 @@ void timer_for_new_info(void)
 
 void parse(int argCount,char**arguments)
 {
- if(argCount < 6) return error("./programm rpcAddr rpcPort rpcUser rpcPass maxWorkers");
+// if(argCount < 6) return error("./programm rpcAddr rpcPort rpcUser rpcPass maxWorkers");
+HOST = "127.0.0.1";
+PORT = 9376;
+USR = "gostcoinrpc";
+PSWRD=0;
+maxWorkers = 5;
+ char ch;
+ while ((ch = getopt (argCount, arguments, "a:p:u:m:w:h")) != -1)
+ {
+  switch (ch)
+  {
+   case 'a':
+   HOST = strdup(optarg);
+   break;
+   case 'p':
+   PORT = atoi(optarg);
+   break;
+   case 'u':
+   USR = strdup(optarg);
+   break;
+   case 'w':
+   PSWRD = strdup(optarg);
+   break;
+   case 'm':
+   maxWorkers = atoi(optarg);
+   break;
+   case '?':
+   case 'h':
+   default:
+    help();
+    break;
+  }
+ }
+/*
  HOST = strdup(arguments[1]);
  PORT = atoi(arguments[2]);
  USR = strdup(arguments[3]);
  PSWRD = strdup(arguments[4]);
  maxWorkers = atoi(arguments[5]);
+*/
+if(!PSWRD) help();
+printf("Host: %s\nPort: %d\n USR: %s,PSWRD: %s\nMAXWORKERS:%d\n",HOST,PORT,USR,PSWRD,maxWorkers);
  workers = (struct users *)malloc(sizeof(struct users*) * maxWorkers);
  printf("Max workers: %d\n",maxWorkers);
 }
