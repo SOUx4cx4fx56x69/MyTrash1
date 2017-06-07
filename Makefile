@@ -1,2 +1,4 @@
 all:
-	gcc main.c socket.c stratum.c base64.c util.c json.c gost.c -lpthread  -o Test
+	gcc src/*.c src/WebInterface/*.c -lpthread  -o Test
+clean:
+	rm Test
