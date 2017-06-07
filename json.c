@@ -1,6 +1,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdint.h>
 #include "stratum.h"
 #include "main.h"
 #include "socket.h"
@@ -254,7 +255,7 @@ CATENATION(buf,work[1],tmp_counter);
 CATENATION(buf,work[2],tmp_counter);
 ASCIIToBin(buf);
 ReverseString(buf);
-u_int32_t digest[16] __attribute__((aligned(64)));
+uint32_t digest[16] __attribute__((aligned(64)));
 sph_gost512(buf,digest,80);
 sph_gost256(digest,buf,64);
 free(work[2]);
