@@ -79,8 +79,7 @@ maxWorkers = 5;
 
  char ch;
 
- void * firstHost=host_web;
- void * fristHost_S=host_stratum;
+
 
  char tmp_host[256];
  char tmp_port[6];
@@ -104,7 +103,7 @@ maxWorkers = 5;
     tmp_host[tmp_counter++]=*optarg++;
    }
    tmp_host[tmp_counter++]='\0';
-
+   host_stratum=strdup(tmp_host);
    tmp_counter=0;
    *optarg++;
    while(*optarg)
@@ -114,12 +113,13 @@ maxWorkers = 5;
    }
    if(!thePort)help();
    tmp_port[6]='\0';
-
+   tmp_counter=0;
    port_stratum=atoi(tmp_port);
-   host_stratum=strdup(tmp_host);
+   
 
    bzero(tmp_port,6);
-   bzero(host_stratum,256);
+   bzero(tmp_host,256);
+  // printf("%s:%d %s:%d\n",host_stratum,port_stratum,host_web,port_web);
    break;
    case 'p':
    PORT = atoi(optarg);
@@ -141,7 +141,7 @@ maxWorkers = 5;
     tmp_host[tmp_counter++]=*optarg++;
    }
    tmp_host[tmp_counter++]='\0';
-
+   host_web=strdup(tmp_host);
    tmp_counter=0;
    *optarg++;
    while(*optarg)
@@ -151,13 +151,11 @@ maxWorkers = 5;
    }
    if(!thePort)help();
    tmp_port[6]='\0';
-
+   tmp_counter=0;
    port_web=atoi(tmp_port);
-   host_web=strdup(tmp_host);
-   
    bzero(tmp_port,6);
    bzero(tmp_host,256);
-
+   printf("%s:%d %s:%d\n",host_stratum,port_stratum,host_web,port_web);
    startWeb();
    break;
    case '?':
