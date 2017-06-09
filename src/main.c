@@ -1,7 +1,7 @@
 #include <signal.h>
 #include "main.h"
 #include "socket/socket.h"
-#include "stratum.h"
+#include "stratum/stratum.h"
 #include"util.h"
 #warning This experemental/develop program!! 
 

@@ -1,10 +1,10 @@
-#include "socket/socket.h"
+#include "../socket/socket.h"
 #include "stratum.h"
-#include "json/json.h"
-#include "WebInterface/Web-Interface.h"
-#include "main.h"
-#include"util.h"
-#include "base64.h"
+#include "../json/json.h"
+#include "../WebInterface/Web-Interface.h"
+#include "../main.h"
+#include"../util.h"
+#include "../base64.h"
 //For !(not)(less :) ) warning(lol bottom)
 #include <string.h>
 #include <string.h>

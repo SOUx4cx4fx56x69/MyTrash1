@@ -1,5 +1,5 @@
 #include "../socket/socket.h"
-#include "../stratum.h"
+#include "../stratum/stratum.h"
 #include "../main.h"
 #include"../util.h"
 #include "../base64.h"
@@ -76,6 +76,18 @@ static const char MIME_TYPES[4][19][30]=
 };
 
 #define HTTP_DIR "stratum_http_interface"
+
+static void * http_parse(char*ptext)
+{
+/*
+while(*ptext)
+ {
+//  if(*ptext == '{');
+  *ptext++;
+ }
+*/
+}
+
 void * startWeb(void)
 {
  int Web_socket;
@@ -121,6 +133,7 @@ if(strcmp(page,"/") == 0)
     buffer = firstbuffer;
     bzero(buffer,MINSIZE);
     read(file,buffer,MINSIZE-1);
+    http_parse(buffer);
     writeTo(socket,buffer);
     writeTo(socket,"\r\n");
     printf("%s\n",buffer);

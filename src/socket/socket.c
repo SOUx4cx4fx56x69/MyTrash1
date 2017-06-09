@@ -1,5 +1,5 @@
 #include "socket.h"
-#include "../stratum.h"
+#include "../stratum/stratum.h"
 #include "../WebInterface/Web-Interface.h"
 #include "../main.h"
 #include <unistd.h>

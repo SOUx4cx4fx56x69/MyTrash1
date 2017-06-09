@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdint.h>
-#include "../stratum.h"
+#include "../stratum/stratum.h"
 #include "../main.h"
 #include "../socket/socket.h"
 #include "../util.h"
