@@ -185,7 +185,7 @@ counter=0;\
 while( what[counter] )\
  *string++=what[counter++];
 
-void Json_Mining_Submit(char*buf,const char*asq,int*socket)
+void * Json_Mining_Submit(char*buf,const char*asq,int*socket)
 {
 #warning NOT WORK CORRECT Json_Mining_Submit
 puts("GetBlockHash");
