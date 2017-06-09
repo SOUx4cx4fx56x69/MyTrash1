@@ -232,13 +232,10 @@ char ** work = (char**)malloc(sizeof(char*)*3);
 
 for(unsigned int i = 4;i--;)
  *(work+i) = (char*)malloc(sizeof(char)*SIZEBUFFER);
-
 const char * ver = "02000000"; //.......
 CATENATION(buf,ver);
 #warning o.o
-sprintf(buf,"%s%s",buf,latest.previousblockhash);
-//CATENATION(buf,latest.previousblockhash);
-
+CATENATION(buf,latest.previousblockhash);
 for(unsigned int i = 0;i<3;i++)
 {
 void *fisrtbuf = work[i];
@@ -261,6 +258,7 @@ free(work[1]);
 free(work);
 goto out;
 }
+
 //printf("SSS: %s %s %s\n",work[0],work[1],work[2]);
 //puts("Catenation");
 
@@ -270,8 +268,6 @@ void*last_addr=buf;
 buf=tmp_adrr;
 ASCIIToBin(buf); 
 //ReverseString(buf); not reversed before, what for two reverse or im not understood?
-
-
 
 char * result0 = GOSThash_FromString(buf,512);
 char * result1 = GOSThash_FromString(result0,256);

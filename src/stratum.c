@@ -45,20 +45,13 @@ bool check_exist_wallet(string wallet)
 {
 char tmp_ask[120];
 sprintf(tmp_ask,"{\"jsonrpc\": \"1.0\", \"id\":\"test\", \"method\": \"validateaddress\", \"params\": [\"%s\"] }",wallet);
-int jumpTo;
 char * tmp_answer = method(tmp_ask);
-char * buffer = getOnlyJson(tmp_answer);
-char**work = (char**)malloc(sizeof(char*) * 1);
-work = (char*)malloc(sizeof(char)*6);
-GET_NUMBER(buffer,jumpTo,work,0,"isvalid");
-if(strcmp(work[0],"true")) 
+if(strstr(tmp_answer,"true") != NULL) 
 {
-free(work[0]);
-free(work);
+free(tmp_answer);
 return 1;
 }
-free(work[0]);
-free(work);
+free(tmp_answer);
 return 0;
 }
 
@@ -268,11 +261,11 @@ while(1)
    else
    {
    printf("Hash: %s\n",hash);
-   sprintf(tmp,meth,"submitblock",hash);
+   sprintf(tmp,meth,"submitblock %s",hash);
    char * answer = method(tmp);
    char * answer1 = getOnlyJson(answer);
    free(answer);
-   if(strstr(answer,"null")!=NULL)//bettery strcmp, but this in future
+   if(strstr(answer1,"null")!=NULL)//bettery strcmp, but this in future
    {
     puts("Yeah?");
    }
