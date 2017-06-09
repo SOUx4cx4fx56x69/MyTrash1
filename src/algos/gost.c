@@ -1,5 +1,6 @@
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "gost.h"
 // from http://huh-muh.blogspot.ru/2013/11/3411-2012.html ,dushevno
 static void GOSThash_LPS(unsigned char *a, unsigned char *result)
@@ -345,9 +346,9 @@ char *GOSThash_FromString (char *string, int hashtype)
     GOSThash_g (e, h, N, h);
 
     GOSThash_g (e, h, Z, h);
-    puts("dontResult");
+
     //result = GOSThash_PrintArray(h, (hashtype == 256) ? 32 : 64 );
-    puts("result");
+
     return result;
 }
 

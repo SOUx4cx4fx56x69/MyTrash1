@@ -7,12 +7,15 @@ void SetBlock(void);
 void threadForGetInfo(void);
 int getWork(void);
 int getInfo(void);
+
 typedef const char* string;
 typedef unsigned long long ull;
 typedef enum
 {
 false,true
 }bool;
+
+bool check_exist_wallet(string wallet);
 
 typedef struct 
 {

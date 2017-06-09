@@ -2,12 +2,15 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdint.h>
-#include "stratum.h"
-#include "main.h"
-#include "socket.h"
-#include "util.h"
-#include"json.h"
-#include "gost.h"
+#include "../stratum.h"
+#include "../main.h"
+#include "../socket/socket.h"
+#include "../util.h"
+#include"../json/json.h"
+#include "../algos/gost.h"
+
+
+
 //shitcode228
 #define SIZEBUFFER MINSIZE*1
 #define Check(buffer) if(*buffer != '"' || *(buffer+1) != ':' || *(buffer+2) != '"' && *buffer) return 0;\
@@ -171,7 +174,7 @@ this should send to socket ~
 writeTo(client,"{\"params\": [\"b3ba\", \"7dcf1304b04e79024066cd9481aa464e2fe17966e19edf6f33970e1fe0b60277\", \"01000000010000000000000000000000000000000000000000000000000000000000000000ffffffff270362f401062f503253482f049b8f175308\", \"0d2f7374726174756d506f6f6c2f000000000100868591052100001976a91431482118f1d7504daf1c001cbfaf91ad580d176d88ac00000000\", [\"57351e8569cb9d036187a79fd1844fd930c1309efcd16c46af9bb9713b6ee734\", \"936ab9c33420f187acae660fcdb07ffdffa081273674f0f41e6ecc1347451d23\"], \"00000002\", \"1b44dfdb\", \"53178f9b\", true], \"id\": null, \"method\": \"mining.notify\"}");
 
 */
-#warning Did not check
+//#warning Did not check
 
 #define CATENATION(string,what)\
 while(*what){\
@@ -184,9 +187,10 @@ while( what[counter] )\
 
 void Json_Mining_Submit(char*buf,const char*asq,int*socket)
 {
+#warning NOT WORK CORRECT Json_Mining_Submit
 puts("GetBlockHash");
 int jumpTo;
-char * buffer = asq;
+char * buffer = (char*)asq;
 void * tmp_adrr=buf;
 printf("%s\n",buf);
 unsigned int tmp_counter=0;

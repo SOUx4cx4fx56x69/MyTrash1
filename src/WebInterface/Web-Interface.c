@@ -1,4 +1,4 @@
-#include "../socket.h"
+#include "../socket/socket.h"
 #include "../stratum.h"
 #include "../main.h"
 #include"../util.h"

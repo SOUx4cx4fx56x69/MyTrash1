@@ -1,6 +1,6 @@
 #include <signal.h>
 #include "main.h"
-#include "socket.h"
+#include "socket/socket.h"
 #include "stratum.h"
 #include"util.h"
 #warning This experemental/develop program!! 
@@ -22,11 +22,11 @@ int main(int argCount,char**arguments)
  pthread_mutex_init(&getters,NULL);
 // pthread_mutex_init(&senders,NULL);
  initStratumServ("127.0.0.1",3333,Stratum);
- pthread_create(&setBlock,0,SetBlock,0);
- pthread_create(&SetInfo,0,threadForGetInfo,0);
- pthread_create(&stratum,0,AcceptClient,Stratum);
+ pthread_create(&setBlock,0,(void*)SetBlock,(void*)0);
+ pthread_create(&SetInfo,0,(void*)threadForGetInfo,(void*)0);
+ pthread_create(&stratum,0,(void*)AcceptClient,Stratum);
  printf("Start thread\n");
- signal(SIGINT,closeserver);
+ signal(SIGINT,(__sighandler_t)closeserver);
  pthread_join(stratum,NULL);
 
 /*

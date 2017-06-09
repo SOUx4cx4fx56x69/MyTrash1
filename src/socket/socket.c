@@ -1,6 +1,6 @@
 #include "socket.h"
-#include "stratum.h"
-#include "main.h"
+#include "../stratum.h"
+#include "../main.h"
 #include <unistd.h>
 #include <string.h>
 #include <sys/types.h>
@@ -16,6 +16,8 @@
  #include <netinet/in.h>
  #include <netdb.h>
 #endif
+
+#define SIZEBUFFER 2056
 
 int 
 InitServer(char*host,int portno)
@@ -109,7 +111,7 @@ printf("Opened new connection with %d.%d.%d.%d\n",
   (int)((cli_addr.sin_addr.s_addr&0xFF00)>>8),
   (int)((cli_addr.sin_addr.s_addr&0xFF0000)>>16),
   (int)((cli_addr.sin_addr.s_addr&0xFF000000)>>24));
-  pthread_create(&client,NULL,ToStratumClient,newsockfd);
+  pthread_create(&client,NULL,(void*)ToStratumClient,newsockfd);
 }//ELSE
 }//while
 
@@ -151,5 +153,5 @@ return -1;
 }
 #endif
 }
-
+#undef SIZEBUFFER
 

@@ -1,5 +1,6 @@
-#include "socket.h"
+#include "socket/socket.h"
 #include "stratum.h"
+#include "json/json.h"
 #include "main.h"
 #include"util.h"
 #include "base64.h"
@@ -310,7 +311,7 @@ bzero(tmp,MINSIZE);
 void ToStratumClient(int socket)
 {
  pthread_t recvFromUser;
- pthread_create(&recvFromUser,NULL,StratumReceiveClient,&socket);
+ pthread_create(&recvFromUser,NULL,(void*)StratumReceiveClient,&socket);
  char tmp[MINSIZE];
  writeTo(socket,"{\"id\": 1, \"result\": [[\"mining.notify\", \"1\"], \"1\", 1], \"error\": null}");
  writeTo(socket,(char*)noError);
