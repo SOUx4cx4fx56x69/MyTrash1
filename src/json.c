@@ -233,9 +233,11 @@ char ** work = (char**)malloc(sizeof(char*)*3);
 for(unsigned int i = 4;i--;)
  *(work+i) = (char*)malloc(sizeof(char)*SIZEBUFFER);
 
-const char * ver = "02000000";
+const char * ver = "02000000"; //.......
 CATENATION(buf,ver);
-CATENATION_(buf,latest.previousblockhash,tmp_counter);
+#warning o.o
+sprintf(buf,"%s%s",buf,latest.previousblockhash);
+//CATENATION(buf,latest.previousblockhash);
 
 for(unsigned int i = 0;i<3;i++)
 {
