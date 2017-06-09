@@ -29,6 +29,7 @@ int main(int argCount,char**arguments)
  pthread_mutex_init(&getters,NULL);
 // pthread_mutex_init(&senders,NULL);
  initServ(host_stratum,port_stratum,Stratum_socket);
+ startWeb();
  pthread_create(&setBlock,0,(void*)SetBlock,(void*)0);
  pthread_create(&SetInfo,0,(void*)threadForGetInfo,(void*)0);
  pthread_create(&stratum,0,(void*)AcceptClient_stratum,Stratum_socket);

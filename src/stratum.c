@@ -96,7 +96,7 @@ maxWorkers = 5;
    HOST = strdup(optarg);
    break;
    case 'S':
-   printf("Get stratum\n");
+   //printf("Get stratum\n");
    while(*optarg)
    {
     if(*optarg==':'){thePort=true;break;}
@@ -157,7 +157,6 @@ maxWorkers = 5;
    bzero(tmp_port,6);
    bzero(tmp_host,256);
    //printf("From Web: %s:%d %s:%d\n",host_stratum,port_stratum,host_web,port_web);
-   startWeb();
    break;
 
    case '?':
