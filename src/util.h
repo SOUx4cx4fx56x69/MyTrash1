@@ -1,5 +1,5 @@
-int CheckString(char*one,char*two,size_t len);
-int FindStartString(char*string,char*what);
+int CheckString(const char*one,const char*two,size_t len);
+int FindStartString(const char*string,const char*what);
 void ReverseString(char*buffer);
 void applog(unsigned int type,const char*frmt,...);
 void ASCIIToBin(char*ascii);

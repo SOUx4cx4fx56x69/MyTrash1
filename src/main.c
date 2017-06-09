@@ -7,7 +7,7 @@
 
 pthread_mutex_t getters;
 
-unsigned int port_web=9025;
+unsigned int port_web=0;
 unsigned int port_stratum=3333;
 
 char * host_web="127.0.0.1";
@@ -29,7 +29,8 @@ int main(int argCount,char**arguments)
  pthread_mutex_init(&getters,NULL);
 // pthread_mutex_init(&senders,NULL);
  initServ(host_stratum,port_stratum,Stratum_socket);
- startWeb();
+ if(port_web !=0)
+  startWeb();
  pthread_create(&setBlock,0,(void*)SetBlock,(void*)0);
  pthread_create(&SetInfo,0,(void*)threadForGetInfo,(void*)0);
  pthread_create(&stratum,0,(void*)AcceptClient_stratum,Stratum_socket);

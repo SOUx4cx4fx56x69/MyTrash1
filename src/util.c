@@ -50,7 +50,7 @@ free(firstAddrTmp);
 }
 
 //int CheckStrings(char*where,int len,...)
-int CheckString(char*one,char*two,size_t len)
+int CheckString(const char*one,const char*two,size_t len)
 {
 for(int i = 0;i<len;i++)
  {
@@ -60,7 +60,7 @@ return 1;
 }
 
 //void findinstrings(char*what,...)
-int FindStartString(char*string,char*what)
+int FindStartString(const char*string,const char*what)
 {
 if( !*what || !*string ) return 0;
 size_t sizeLen = strlen( what );
