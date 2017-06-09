@@ -76,11 +76,19 @@ PORT = 9376;
 USR = "gostcoinrpc";
 PSWRD=0;
 maxWorkers = 5;
+
  char ch;
+
  void * firstHost=host_web;
  void * fristHost_S=host_stratum;
- char tmp[6]; // 65536
+
+ char tmp_host[256];
+ char tmp_port[6];
+
+ bool thePort=false; 
+
  unsigned int tmp_counter=0;
+
  while ((ch = getopt (argCount, arguments, "a:p:u:m:w:hi:s:")) != -1)
  {
   switch (ch)
@@ -89,18 +97,29 @@ maxWorkers = 5;
    HOST = strdup(optarg);
    break;
    case 's':
-   while(*optarg && !*optarg==':')
+   while(*optarg)
    {
-    *host_stratum++=*optarg++;
+    if(*optarg==':'){thePort=true;break;}
+    if(tmp_counter+1 > 255) help();
+    tmp_host[tmp_counter++]=*optarg++;
    }
+   tmp_host[tmp_counter++]='\0';
+
+   tmp_counter=0;
    *optarg++;
    while(*optarg)
    {
-     tmp[tmp_counter++]=*optarg++;
+ 	if(tmp_counter+1 > 5) help();
+	tmp_port[tmp_counter++]=*optarg++;
    }
-   port_stratum=atoi(tmp);
-   bzero(tmp,6);
-   host_stratum=fristHost_S;
+   if(!thePort)help();
+   tmp_port[6]='\0';
+
+   port_stratum=atoi(tmp_port);
+   host_stratum=strdup(tmp_host);
+
+   bzero(tmp_port,6);
+   bzero(host_stratum,256);
    break;
    case 'p':
    PORT = atoi(optarg);
@@ -115,20 +134,30 @@ maxWorkers = 5;
    maxWorkers = atoi(optarg);
    break;
    case 'i':
-   while(*optarg && !*optarg==':')
-   {
-    *host_web++=*optarg++;
-   }
-   if(!*optarg != ':') help();
-   *optarg++;
-
    while(*optarg)
    {
-     tmp[tmp_counter++]=*optarg++;
+    if(*optarg==':'){thePort=true;break;}
+    if(tmp_counter+1 > 255) help();
+    tmp_host[tmp_counter++]=*optarg++;
    }
-   port_web=atoi(tmp);
-   bzero(tmp,6);
-   port_web=firstHost; 
+   tmp_host[tmp_counter++]='\0';
+
+   tmp_counter=0;
+   *optarg++;
+   while(*optarg)
+   {
+ 	if(tmp_counter+1 > 5) help();
+	tmp_port[tmp_counter++]=*optarg++;
+   }
+   if(!thePort)help();
+   tmp_port[6]='\0';
+
+   port_web=atoi(tmp_port);
+   host_web=strdup(tmp_host);
+   
+   bzero(tmp_port,6);
+   bzero(tmp_host,256);
+
    startWeb();
    break;
    case '?':
