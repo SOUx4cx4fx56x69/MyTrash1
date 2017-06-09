@@ -4,6 +4,8 @@
 #include"../util.h"
 #include "../base64.h"
 #include <unistd.h>
+static const char HTTP_OK[] = "HTTP/1.1 200 OK text/html";
+static const char HTTP_NOTFOUND[] = "HTTP/1.1 404 Not Found text/html";
 void * startWeb(void)
 {
  int Web_socket;
@@ -18,6 +20,7 @@ void * WebThread(int socket)
 char buffer[2056];
 readFrom(socket,buffer);
 printf("Web: %s\n",buffer);
+writeTo(socket,HTTP_NOTFOUND);
 bzero(buffer,2056);
 close(socket);
 }
