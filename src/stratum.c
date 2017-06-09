@@ -1,6 +1,7 @@
 #include "socket/socket.h"
 #include "stratum.h"
 #include "json/json.h"
+#include "WebInterface/Web-Interface.h"
 #include "main.h"
 #include"util.h"
 #include "base64.h"
@@ -76,12 +77,30 @@ USR = "gostcoinrpc";
 PSWRD=0;
 maxWorkers = 5;
  char ch;
- while ((ch = getopt (argCount, arguments, "a:p:u:m:w:hi:")) != -1)
+ void * firstHost=host_web;
+ void * fristHost_S=host_stratum;
+ char tmp[6]; // 65536
+ unsigned int tmp_counter=0;
+ while ((ch = getopt (argCount, arguments, "a:p:u:m:w:hi:s:")) != -1)
  {
   switch (ch)
   {
    case 'a':
    HOST = strdup(optarg);
+   break;
+   case 's':
+   while(*optarg && !*optarg==':')
+   {
+    *host_stratum++=*optarg++;
+   }
+   *optarg++;
+   while(*optarg)
+   {
+     tmp[tmp_counter++]=*optarg++;
+   }
+   port_stratum=atoi(tmp);
+   bzero(tmp,6);
+   host_stratum=fristHost_S;
    break;
    case 'p':
    PORT = atoi(optarg);
@@ -96,6 +115,21 @@ maxWorkers = 5;
    maxWorkers = atoi(optarg);
    break;
    case 'i':
+   while(*optarg && !*optarg==':')
+   {
+    *host_web++=*optarg++;
+   }
+   if(!*optarg != ':') help();
+   *optarg++;
+
+   while(*optarg)
+   {
+     tmp[tmp_counter++]=*optarg++;
+   }
+   port_web=atoi(tmp);
+   bzero(tmp,6);
+   port_web=firstHost; 
+   startWeb();
    break;
    case '?':
    case 'h':

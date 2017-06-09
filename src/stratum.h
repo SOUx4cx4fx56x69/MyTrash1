@@ -65,6 +65,6 @@ block latest;
 users * workers;
 information Info;
 
-#define initStratumServ(host,port,socket){\
+#define initServ(host,port,socket){\
 socket=InitServer(host,port);\
 }

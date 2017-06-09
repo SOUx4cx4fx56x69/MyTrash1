@@ -4,6 +4,7 @@ int readFrom(int socket,char*buffer);
 void error(char*msg);
 int InitClient(char*host,int portno);
 int
-AcceptClient(int socket);
+AcceptClient_stratum(int socket);
+int AcceptClient_web(int socket);
 int 
 InitServer(char*host,int portno);

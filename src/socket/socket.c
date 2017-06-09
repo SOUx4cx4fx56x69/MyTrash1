@@ -1,5 +1,6 @@
 #include "socket.h"
 #include "../stratum.h"
+#include "../WebInterface/Web-Interface.h"
 #include "../main.h"
 #include <unistd.h>
 #include <string.h>
@@ -89,7 +90,7 @@ InitClient(char*host,int portno)
 
 
 int
-AcceptClient(int socket)
+AcceptClient_stratum(int socket)
 {
 //
 pthread_t client;
@@ -114,8 +115,36 @@ printf("Opened new connection with %d.%d.%d.%d\n",
   pthread_create(&client,NULL,(void*)ToStratumClient,newsockfd);
 }//ELSE
 }//while
-
 }//function
+
+int
+AcceptClient_web(int socket)
+{
+//
+pthread_t client;
+struct sockaddr_in cli_addr;
+while(1)
+{
+int clientlen = sizeof(cli_addr);
+////
+int newsockfd = accept(socket,
+				  (struct sockaddr *) &cli_addr, 
+								 &clientlen);
+////
+if (newsockfd < 0) 
+  close(newsockfd);
+else
+{
+printf("Opened new connection with %d.%d.%d.%d\n",
+  (int)(cli_addr.sin_addr.s_addr&0xFF),
+  (int)((cli_addr.sin_addr.s_addr&0xFF00)>>8),
+  (int)((cli_addr.sin_addr.s_addr&0xFF0000)>>16),
+  (int)((cli_addr.sin_addr.s_addr&0xFF000000)>>24));
+  pthread_create(&client,NULL,(void*)WebThread,newsockfd);
+}//ELSE
+}//while
+}//function
+
 
 int inline
 writeTo(int socket,char*msg)

@@ -6,6 +6,13 @@
 #warning This experemental/develop program!! 
 
 pthread_mutex_t getters;
+
+unsigned int port_web=9025;
+unsigned int port_stratum=3333;
+
+char * host_web="127.0.0.1";
+char * host_stratum="127.0.0.1";
+
 //pthread_mutex_t senders;
 
 int main(int argCount,char**arguments)
@@ -18,13 +25,13 @@ int main(int argCount,char**arguments)
  pthread_t stratum;
  pthread_t SetInfo;
  pthread_t setBlock;
- int Stratum;
+ int Stratum_socket;
  pthread_mutex_init(&getters,NULL);
 // pthread_mutex_init(&senders,NULL);
- initStratumServ("127.0.0.1",3333,Stratum);
+ initServ(host_stratum,port_stratum,Stratum_socket);
  pthread_create(&setBlock,0,(void*)SetBlock,(void*)0);
  pthread_create(&SetInfo,0,(void*)threadForGetInfo,(void*)0);
- pthread_create(&stratum,0,(void*)AcceptClient,Stratum);
+ pthread_create(&stratum,0,(void*)AcceptClient_stratum,Stratum_socket);
  printf("Start thread\n");
  signal(SIGINT,(__sighandler_t)closeserver);
  pthread_join(stratum,NULL);

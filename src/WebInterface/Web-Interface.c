@@ -3,7 +3,20 @@
 #include "../main.h"
 #include"../util.h"
 #include "../base64.h"
-void * WebThread(void)
+#include <unistd.h>
+void * startWeb(void)
 {
-
+ int Web_socket;
+ pthread_t Web;
+ initServ(host_web,port_web,Web_socket);
+ pthread_create(&Web,0,(void*)AcceptClient_web,Web_socket);
+ pthread_join(Web,NULL);
+}
+void * WebThread(int socket)
+{
+char buffer[2056];
+readFrom(socket,buffer);
+printf("Web: %s\n",buffer);
+bzero(buffer,2056);
+close(socket);
 }
