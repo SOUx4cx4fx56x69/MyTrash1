@@ -269,6 +269,8 @@ buf=tmp_adrr;
 ASCIIToBin(buf); 
 //ReverseString(buf); not reversed before, what for two reverse or im not understood?
 
+
+/*
 char * result0 = GOSThash_FromString(buf,512);
 char * result1 = GOSThash_FromString(result0,256);
 free(result0);
@@ -280,8 +282,7 @@ CATENATION(buf,result1);
 result1=last_addr;
 
 free(result1);
-puts(buf);
-
+*/
 
 
 free(work[0]);

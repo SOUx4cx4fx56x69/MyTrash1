@@ -2,7 +2,7 @@
 #define MAXLOGINSIZE 120
 void closeserver(void);
 void ToStratumClient(int socket);
-char * method(char*method);
+char * method(const char*method);
 void SetBlock(void);
 void threadForGetInfo(void);
 int getWork(void);

@@ -200,7 +200,7 @@ Info.networkhashps
 }
 
 
-char * method(char*method)
+char * method(const char*method)
 {
 int Coin = InitClient( HOST, PORT );
 char * tmp = (char*)calloc(sizeof(char),MINSIZE);
@@ -249,8 +249,9 @@ while(1)
  applog(DEBUG, "Written: %s\n",tmp);
  if(strstr(tmp,"mining.submit") != NULL)
  {
+/*
    char * hash = (char*)calloc(sizeof(char),SIZETEMPLATEHASH);
-   char result[17];
+   char result[30];
    Json_Mining_Submit(hash,tmp,socket);
    if(!hash)
    {
@@ -261,24 +262,31 @@ while(1)
    else
    {
    printf("Hash: %s\n",hash);
-   sprintf(tmp,meth,"submitblock %s",hash);
+
+   sprintf(tmp,meth,"submitblock",hash);
    char * answer = method(tmp);
+   puts(answer);
    char * answer1 = getOnlyJson(answer);
    free(answer);
    if(strstr(answer1,"null")!=NULL)//bettery strcmp, but this in future
    {
+   pthread_mutex_unlock(&getters);
     puts("Yeah?");
    }
    else
    {
     puts("Not yeah!!");
    }
-   free(hash);
+
+
    //checkhash
    //sendresult
    //after
-   pthread_mutex_unlock(&getters);
+
   } 
+
+  free(hash);
+*/
 }
 else if(strstr(tmp,"mining.authorize") != NULL) 
  {
@@ -290,11 +298,13 @@ else if(strstr(tmp,"mining.authorize") != NULL)
   }
  }
  if(*tmp == 0) break;
+puts("exit");
 }
 if(activeWorkers != 0)
  activeWorkers--;
 close(*socket);
 *socket=0;
+bzero(tmp,MINSIZE);
 }
 
 void ToStratumClient(int socket)

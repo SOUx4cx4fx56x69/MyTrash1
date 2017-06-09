@@ -345,8 +345,9 @@ char *GOSThash_FromString (char *string, int hashtype)
     GOSThash_g (e, h, N, h);
 
     GOSThash_g (e, h, Z, h);
-
-    result = GOSThash_PrintArray(h, (hashtype == 256) ? 32 : 64);
+    puts("dontResult");
+    //result = GOSThash_PrintArray(h, (hashtype == 256) ? 32 : 64 );
+    puts("result");
     return result;
 }
 
