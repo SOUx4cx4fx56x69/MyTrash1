@@ -6,7 +6,7 @@
  * (Slightly changed by other a people)
  */
 
-#include "main.h"
+#include "../main.h"
 static const char b64_table[] = {
   'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
   'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',

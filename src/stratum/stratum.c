@@ -4,7 +4,7 @@
 #include "../WebInterface/Web-Interface.h"
 #include "../main.h"
 #include"../util.h"
-#include "../base64.h"
+#include "../algos/base64.h"
 //For !(not)(less :) ) warning(lol bottom)
 #include <string.h>
 #include <string.h>

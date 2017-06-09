@@ -2,7 +2,7 @@
 #include "../stratum/stratum.h"
 #include "../main.h"
 #include"../util.h"
-#include "../base64.h"
+#include "../algos/base64.h"
 #include <string.h>
 #include <unistd.h>
 #include <sys/stat.h> 
