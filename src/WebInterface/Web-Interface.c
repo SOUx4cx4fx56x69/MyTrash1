@@ -10,9 +10,70 @@
 
 
 static const char HTTP_OK[] = "HTTP/1.1 200 OK\n"
-			"Content-type: text/html\n"
+			"Content-type: %s\n"
 			"\r\n";
 static const char HTTP_NOTFOUND[] = "HTTP/1.1 404 Not Found text/html";
+
+static const char ** MIME_TYPES=
+{
+{
+"application/atom+xml",
+"application/EDI-X12",
+"application/EDIFACT",
+"application/json",
+"application/javascript",
+"application/octet-stream",
+"application/ogg",
+"application/pdf",
+"application/postscript",
+"application/soap+xml",
+"application/font-woff",
+"application/xhtml+xml",
+"application/xml-dtd",
+"application/xop+xml",
+"application/zip",
+"application/gzip",
+"application/x-bittorrent",
+"application/x-tex",
+"application/xml"
+},
+
+{
+"audio/basic",
+"audio/L24",
+"audio/mp4",
+"audio/aac",
+"audio/mpeg",
+"audio/ogg",
+"audio/vorbis",
+"audio/x-ms-wma",
+"audio/x-ms-wax",
+"audio/vnd.rn-realaudio",
+"audio/vnd.wave",
+"audio/webm"
+},
+
+{
+"image/gif",
+"image/jpeg",
+"image/pjpeg",
+"image/png",
+"image/svg+xml",
+"image/tiff",
+"image/vnd.microsoft.icon",
+"image/vnd.wap.wbmp",
+"image/webp"
+},
+
+{
+"text/css",
+"text/html",
+"text/javascript",
+"text/plain"
+}
+
+};
+
 #define HTTP_DIR "stratum_http_interface"
 void * startWeb(void)
 {
@@ -51,7 +112,8 @@ if(strcmp(page,"/") == 0)
  if(file == -1) writeTo(socket,HTTP_NOTFOUND);
  else
  {
-   writeTo(socket,HTTP_OK);
+   sprintf(page,HTTP_OK,"text/html");
+   writeTo(socket,page);
    do
    {
     buffer = firstbuffer;
@@ -67,6 +129,7 @@ if(strcmp(page,"/") == 0)
 }else{
 sprintf(page,"%s/%s",HTTP_DIR,page);
 file = open(page,O_RDONLY);
+sprintf(page,HTTP_OK,"text/html");
 if(file == -1) writeTo(socket,HTTP_NOTFOUND);
 else
 {
