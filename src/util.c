@@ -133,7 +133,7 @@ puts
 "-u UserName RPC\n"
 "-w Password RPC\n"
 "-m maxUsers\n"
-"-s stratum host:port\n"
+"-S stratum host:port\n"
 "-i webInterface 'host:port' null/empty for disable"
 );
 exit(1);

@@ -88,14 +88,15 @@ maxWorkers = 5;
 
  unsigned int tmp_counter=0;
 
- while ((ch = getopt (argCount, arguments, "a:p:u:m:w:hi:s:")) != -1)
+ while ((ch = getopt (argCount, arguments, "S:i:a:p:u:m:w:h")) != -1)
  {
   switch (ch)
   {
    case 'a':
    HOST = strdup(optarg);
    break;
-   case 's':
+   case 'S':
+   printf("Get stratum\n");
    while(*optarg)
    {
     if(*optarg==':'){thePort=true;break;}
@@ -119,7 +120,7 @@ maxWorkers = 5;
 
    bzero(tmp_port,6);
    bzero(tmp_host,256);
-  // printf("%s:%d %s:%d\n",host_stratum,port_stratum,host_web,port_web);
+   //printf("From stratum: %s:%d %s:%d\n",host_stratum,port_stratum,host_web,port_web);
    break;
    case 'p':
    PORT = atoi(optarg);
@@ -155,9 +156,10 @@ maxWorkers = 5;
    port_web=atoi(tmp_port);
    bzero(tmp_port,6);
    bzero(tmp_host,256);
-   printf("%s:%d %s:%d\n",host_stratum,port_stratum,host_web,port_web);
+   //printf("From Web: %s:%d %s:%d\n",host_stratum,port_stratum,host_web,port_web);
    startWeb();
    break;
+
    case '?':
    case 'h':
    default:
