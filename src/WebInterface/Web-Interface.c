@@ -14,8 +14,9 @@ static const char HTTP_OK[] = "HTTP/1.1 200 OK\n"
 			"\r\n";
 static const char HTTP_NOTFOUND[] = "HTTP/1.1 404 Not Found text/html";
 
-static const char ** MIME_TYPES=
+static const char MIME_TYPES[2][19][30]=
 {
+
 {
 "application/atom+xml",
 "application/EDI-X12",
@@ -112,7 +113,7 @@ if(strcmp(page,"/") == 0)
  if(file == -1) writeTo(socket,HTTP_NOTFOUND);
  else
  {
-   sprintf(page,HTTP_OK,"text/html");
+   sprintf(page,HTTP_OK,MIME_TYPES[3][2]);
    writeTo(socket,page);
    do
    {
